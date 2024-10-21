@@ -4,5 +4,24 @@
 
 /*Apply the Popping imported Font-family to everything in the project*/
 * {
-    font-family: "Poppins", sans-serif;
+  font-family: "Poppins", sans-serif;
+}
+
+/*Tag and style the span for the Hero text*/
+span {
+  /*Making sure that the font-family and font-weights are the same as the rest of the code. Sometimes the <span> make some mess with them*/
+  font-family: inherit;
+  font-weight: inherit;
+}
+
+/*Tag and define the blueShadow class used in the Button tag in the Hero.jsx file inside tailwind className used to define the button style*/
+.blueShadow {
+  box-shadow: 3px 3px 0 0 #60a5fa;
+}
+/*Add some hover style to the blueShadow of the button*/
+.blueShadow:hover {
+  /*With this, we add some pop-up effect to the button*/
+  transform: translate(-3px, -3px);
+  /*Increase the shadow thickness when the mouse hover the button*/
+  box-shadow: 6px 6px 0 0 #60a5fa;
 }
