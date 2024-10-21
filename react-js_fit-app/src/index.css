@@ -1,3 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/*Apply the Popping imported Font-family to everything in the project*/
+* {
+    font-family: "Poppins", sans-serif;
+}
