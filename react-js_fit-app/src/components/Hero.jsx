@@ -10,7 +10,7 @@ export default function Hero() {
         {/* <p>IT'S TIME TO GET</p> */}
         {/*the <span> tag is used to group inline elements or text. It doesn't inherently apply any styling or layout behavior on its own, but it serves as a generic container that you can target with CSS or manipulate with JavaScript.*/}
         {/* <h1 className='uppercase font-semibold text-4xl sm:text-5xl md:text-6xl lg:text-7xl'>Gige<span className='text-blue-400'>normous</span></h1> */}
-        <img className='w-[500px]' src='\SWOLE_Home_2.svg' />
+        <img className='w-[500px] lg:w-[700px] 2xl:w-[900px]' src='\SWOLE_Home_2.svg' />
       </div>
       <p className='text-sm md:text-base font-light'>I hereby acknowledge that I may become so <span className='text-blue-400 font-medium'>comically massive</span>, my reflection will need a panoramic mode. I accept the risks of developing a neck as wide as my social circle, doors as mortal enemies, and the constant fear of being mistaken for a <span className='text-blue-400 font-medium'>walking protein shake</span></p>
       <button className='px-8 py-4 rounded-md border-[2px] bg-slate-950 border-blue-400 border-solid blueShadow duration-200'>
