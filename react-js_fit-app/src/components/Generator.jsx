@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import SectionWrapper from './SectionWrapper'
 import { WORKOUTS } from '../utils/swoldier';
 
@@ -18,6 +18,15 @@ const Header = (props) => {
 };
 
 export default function Generator() {
+
+  // The state that condition when the "drop down" of the "Select muscle group" button is visible or not.
+  // !!!! The States are the only things that makes the React app interactive to user interaction (when a variable changes and consequently we expect something to change in the screen)!!!!! When the State variable, the screen is repainted. 
+  const [showModal, setShowModal] = useState(false);
+  // Function that is called when the "Select muscle group" is clicked, for turning showModal to true.
+  function toggleModal() {
+    setShowModal(!showModal);
+  }
+
   return (
     // Here for the SectionWrapper component we have the opening and close tags, and the reason we are doing that is because we want children content within the SectionWrapper. 
     // So for example, when just created, if you write something between the SectionWrapper tags, it won't be rendered on the webpage. Only the things inside the SectionWrapper tag will be rendered.
@@ -49,15 +58,16 @@ export default function Generator() {
       </div>
       
       {/*Replicate another Header section*/}
-      <Header index={'02'} title={'Lock on targets'} description={'Select the workout you whish to endure.'} />
-      <div className='grid grid-cols-2 sm:grid-cols-4 gap-4'>
-        {Object.keys(WORKOUTS).map((type, typeIndex) => {
-          return (
-            <button className='bg-slate-950 border border-blue-400 duration-200 hover:border-blue-600 py-3 rounded-lg' key={typeIndex}>
-              <p className='capitalize'>{type.replaceAll('_', ' ')}</p>
-            </button>
-          )
-        }
+      <Header index={'02'} title={'Lock on targets'} description={'Select the muscle judge for annihilation.'} />
+      <div className='bg-slate-950 border border-solid border-blue-400 rounded-lg flex flex-col'>
+        {/*Adding the onClick event on this button, so that when it is clicked, the showModal comes true and the modals are displayed.*/}
+        <button onClick={toggleModal} className='relative p-3 flex items-center justify-center'>
+          <p>Select muscle group</p>
+          <i className="fa-solid absolute right-3 top-1/2 -translate-y-1/2 fa-caret-down"></i>
+        </button>
+        {/*Show the "drop down" menu if the showModal is true. It is not a drop down, it is just a button, that gets filled with buttons of the muscles when the showModal is true.*/}
+        {showModal && (
+          <div className='px-3'>modal</div>
         )}
       </div>
 
