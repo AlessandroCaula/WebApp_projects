@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import SectionWrapper from './SectionWrapper'
-import { WORKOUTS } from '../utils/swoldier';
+import { SCHEMES, WORKOUTS } from '../utils/swoldier';
 
 // Creating a new compoenent as an arrow function. 
 const Header = (props) => {
@@ -27,6 +27,27 @@ export default function Generator() {
     setShowModal(!showModal);
   }
 
+  // Define a new useState which will be changed when the buttons in the "Pick your poison" is selected/clicked. The default value for this useState is going to be 'individual'
+  const [poison, setPoison] = useState('individual');
+  // Define a useState variable for teh muscle group button. The default value of this useState is an empty array, that will be then filled with the different muscles groups available for the type of poson (workout) you select
+  const [muscles, setMuscles] = useState([]);
+  // Define a useState for the goals. The default value is one of the SCHEME of the swoldier.js file.
+  const [goal, setGoal] = useState('strength_power');
+
+  // Define a function used to update the selection of the muscles. 
+  function updateMuscles(muscleGroups) {
+    // We will limit the number of muscles that they can train each time to two in this case. You won't be able to select more than 2 muscles at the time. 
+    if (muscles.length > 2) {
+      return;
+    }
+
+    // if the poison selected (the workout) is not the individual one, we are going to set the muscleGroups list.  
+    if (poison !== 'individual') {
+      setMuscles([muscleGroups]);
+      return;
+    }
+  }
+
   return (
     // Here for the SectionWrapper component we have the opening and close tags, and the reason we are doing that is because we want children content within the SectionWrapper. 
     // So for example, when just created, if you write something between the SectionWrapper tags, it won't be rendered on the webpage. Only the things inside the SectionWrapper tag will be rendered.
@@ -47,17 +68,22 @@ export default function Generator() {
             type => is each key in the array (e.g. 'individual', 'bro_spli', ect.)
             typeIndex => is the index of the current key in the array (e.g., 0 for 'individual', 1 for 'bro_split', etc.).*/}
         {Object.keys(WORKOUTS).map((type, typeIndex) => {
-          {/*With the map, whenever you render content like we are doing, we have to give the parent element within the return statement a key tht is unique, that's why we are given the index of the key (typeIndex)*/}
+          {/*With the map, whenever you render content like we are doing, we have to give the parent element within the return statement a key tht is unique, that's why we are given the index of the key (typeIndex)*/ }
           return (
-            <button className='bg-slate-950 border border-blue-400 duration-200 hover:border-blue-600 py-3 rounded-lg' key={typeIndex}>
+            // Instead of calling a function on the onClick event (what we do in the muscles selection with the toggleModal function, which is called on click) here we are gonna define an arrow function.
+            // We are also giving some dynamic styling to the className of the button, by adding the {} and the + => when the condition is true (when the style is equal to the poison useState variable), the styles after the + will apply. Setting the border to border-blue-400 when the button is not clicked, and the permanent boder-blu-600 when it is clicked.
+            <button onClick={() => {
+              // Setting the useState poison variable with the value of the button, which is the type variable in this case. 
+              setPoison(type);
+            }} className={'bg-slate-950 border duration-200 hover:border-blue-900 py-3 rounded-lg' + (type === poison ? ' border-blue-900' : ' border-blue-400')} key={typeIndex}>
               <p className='capitalize'>{type.replaceAll('_', ' ')}</p>
             </button>
           )
         }
         )}
       </div>
-      
-      {/*Replicate another Header section*/}
+
+      {/*02 Header Selection. For the Muscle groups.*/}
       <Header index={'02'} title={'Lock on targets'} description={'Select the muscle judge for annihilation.'} />
       <div className='bg-slate-950 border border-solid border-blue-400 rounded-lg flex flex-col'>
         {/*Adding the onClick event on this button, so that when it is clicked, the showModal comes true and the modals are displayed.*/}
@@ -66,8 +92,38 @@ export default function Generator() {
           <i className="fa-solid absolute right-3 top-1/2 -translate-y-1/2 fa-caret-down"></i>
         </button>
         {/*Show the "drop down" menu if the showModal is true. It is not a drop down, it is just a button, that gets filled with buttons of the muscles when the showModal is true.*/}
+        {/*Here we have to map all the muscles available for the selected workout object key (individual, bro_split, bodybuilder_split, upper_lowe). !!! We have to pay attention, sincle only the 'individual' keys return an entire array, not the others, which they have other objects, dict, inside.*/}
         {showModal && (
-          <div className='px-3'>modal</div>
+          <div className='flex flex-col pb-1 pl-3'>
+            {/*In this way, only when individual is selected is going to return the entire array of the muscles, otherwise the keys of the other objects inside the WORKOUTS object. We then map each of the elements and create a button for each one.*/}
+            {(poison === 'individual' ? WORKOUTS[poison] : Object.keys(WORKOUTS[poison])).map((muscleGroups, muscleGroupsIndex) => {
+              return (
+                // Keep in mind that you have to have the unique key for these buttons. 
+                <button onClick={() => {
+
+                }} key={muscleGroupsIndex} className='hover:text-blue-400 duration-200'>
+                  <p className='uppercase'>{muscleGroups.replaceAll('_', ' ')}</p>
+                </button>
+              )
+            })}
+          </div>
+        )}
+      </div>
+
+      {/*03 Header Selection. For the Scheme Goals*/}
+      <Header index={'03'} title={'Become Juggernaut'} description={'Select your ultimate object.'} />
+      <div className='grid grid-cols-3 gap-4'>
+        {Object.keys(SCHEMES).map((scheme, schemeIndex) => {
+          // As we did in the workout selection we are gonna create an arrow functin to set the goals useState function and we are gonna conditionally style the buttons when they are clicked and selected. 
+          return (
+            <button onClick={() => {
+              // Set the setGoal useState variable with the scheme values, which is the value of the clicked button. 
+              setGoal(scheme)
+            }} className={'bg-slate-950 border duration-200 hover:border-blue-900 py-3 rounded-lg' + (scheme === goal ? ' border-blue-900' : ' border-blue-400')} key={schemeIndex}>
+              <p className='capitalize'>{scheme.replaceAll('_', ' ')}</p>
+            </button>
+          )
+        }
         )}
       </div>
 
