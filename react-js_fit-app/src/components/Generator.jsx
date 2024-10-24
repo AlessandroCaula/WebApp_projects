@@ -36,15 +36,31 @@ export default function Generator() {
 
   // Define a function used to update the selection of the muscles. 
   function updateMuscles(muscleGroups) {
-    // We will limit the number of muscles that they can train each time to two in this case. You won't be able to select more than 2 muscles at the time. 
+    console.log(muscles.length + 1);
+    // Check if the muscles group is already present in the muscles list.
+    // In case the user clicked a second time, always means that we have to remove it from the list.
+    if (muscles.includes(muscleGroups)) {
+      // When the user click the second time the same muscle groups, which is then already inserted in the list, it means that the user want to remove this muscle group.
+      // Filtering out the muscle group that we want to remove. 
+      setMuscles(muscles.filter(val => val !== muscleGroups));
+      return;
+    }
+    // We will limit the number of muscles that they can train each time to three in this case. You won't be able to select more than 3 muscles at the time. No muscles overload ;)
     if (muscles.length > 2) {
       return;
     }
-
     // if the poison selected (the workout) is not the individual one, we are going to set the muscleGroups list.  
     if (poison !== 'individual') {
       setMuscles([muscleGroups]);
+      // When selecting a muscles group not from the individual one, we will close the showModal.
+      setShowModal(false);
       return;
+    }
+    // If it is none of the above cases, we will add it to the muscleGroups list.
+    setMuscles([...muscles, muscleGroups]);
+
+    if (muscles.length === 2) {
+      setShowModal(false)
     }
   }
 
@@ -73,6 +89,8 @@ export default function Generator() {
             // Instead of calling a function on the onClick event (what we do in the muscles selection with the toggleModal function, which is called on click) here we are gonna define an arrow function.
             // We are also giving some dynamic styling to the className of the button, by adding the {} and the + => when the condition is true (when the style is equal to the poison useState variable), the styles after the + will apply. Setting the border to border-blue-400 when the button is not clicked, and the permanent boder-blu-600 when it is clicked.
             <button onClick={() => {
+              // When changing workout (poison) set as an empty array the muscles collection. 
+              setMuscles([]);
               // Setting the useState poison variable with the value of the button, which is the type variable in this case. 
               setPoison(type);
             }} className={'bg-slate-950 border duration-200 hover:border-blue-900 py-3 rounded-lg' + (type === poison ? ' border-blue-900' : ' border-blue-400')} key={typeIndex}>
@@ -88,8 +106,9 @@ export default function Generator() {
       <div className='bg-slate-950 border border-solid border-blue-400 rounded-lg flex flex-col'>
         {/*Adding the onClick event on this button, so that when it is clicked, the showModal comes true and the modals are displayed.*/}
         <button onClick={toggleModal} className='relative p-3 flex items-center justify-center'>
-          <p>Select muscle group</p>
-          <i className="fa-solid absolute right-3 top-1/2 -translate-y-1/2 fa-caret-down"></i>
+          {/*Adding some conditional formatting based on the number of selected muscles*/}
+          <p className='capitalize'>{muscles.length === 0 ? 'Select muscle group' : muscles.join(' - ')}</p>
+          <i className="fa-solid absolute right-3 top-1/2 -translate-y-1/2  fa-caret-down"></i>
         </button>
         {/*Show the "drop down" menu if the showModal is true. It is not a drop down, it is just a button, that gets filled with buttons of the muscles when the showModal is true.*/}
         {/*Here we have to map all the muscles available for the selected workout object key (individual, bro_split, bodybuilder_split, upper_lowe). !!! We have to pay attention, sincle only the 'individual' keys return an entire array, not the others, which they have other objects, dict, inside.*/}
@@ -99,9 +118,10 @@ export default function Generator() {
             {(poison === 'individual' ? WORKOUTS[poison] : Object.keys(WORKOUTS[poison])).map((muscleGroups, muscleGroupsIndex) => {
               return (
                 // Keep in mind that you have to have the unique key for these buttons. 
+                // Define some conditional styling as well for the muscle selected.
                 <button onClick={() => {
-
-                }} key={muscleGroupsIndex} className='hover:text-blue-400 duration-200'>
+                  updateMuscles(muscleGroups);
+                }} key={muscleGroupsIndex} className={'hover:text-blue-400 duration-200' + (muscles.includes(muscleGroups) ? ' text-blue-400' : ' ')} >
                   <p className='uppercase'>{muscleGroups.replaceAll('_', ' ')}</p>
                 </button>
               )
