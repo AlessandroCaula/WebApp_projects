@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import SectionWrapper from './SectionWrapper'
 import { SCHEMES, WORKOUTS } from '../utils/swoldier';
+import Button from './Button';
 
 // Creating a new compoenent as an arrow function. 
 const Header = (props) => {
@@ -17,7 +18,10 @@ const Header = (props) => {
   )
 };
 
-export default function Generator() {
+export default function Generator(props) {
+
+  // Deconstruct all the useState variables that are passed through the parent App component down to this component.
+  const { poison, setPoison, muscles, setMuscles, goal, setGoal, updateWorkout } = props;
 
   // The state that condition when the "drop down" of the "Select muscle group" button is visible or not.
   // !!!! The States are the only things that makes the React app interactive to user interaction (when a variable changes and consequently we expect something to change in the screen)!!!!! When the State variable, the screen is repainted. 
@@ -26,13 +30,6 @@ export default function Generator() {
   function toggleModal() {
     setShowModal(!showModal);
   }
-
-  // Define a new useState which will be changed when the buttons in the "Pick your poison" is selected/clicked. The default value for this useState is going to be 'individual'
-  const [poison, setPoison] = useState('individual');
-  // Define a useState variable for teh muscle group button. The default value of this useState is an empty array, that will be then filled with the different muscles groups available for the type of poson (workout) you select
-  const [muscles, setMuscles] = useState([]);
-  // Define a useState for the goals. The default value is one of the SCHEME of the swoldier.js file.
-  const [goal, setGoal] = useState('strength_power');
 
   // Define a function used to update the selection of the muscles. 
   function updateMuscles(muscleGroups) {
@@ -93,7 +90,7 @@ export default function Generator() {
               setMuscles([]);
               // Setting the useState poison variable with the value of the button, which is the type variable in this case. 
               setPoison(type);
-            }} className={'bg-slate-950 border duration-200 hover:border-blue-900 py-3 rounded-lg' + (type === poison ? ' border-blue-900' : ' border-blue-400')} key={typeIndex}>
+            }} className={'bg-slate-950 px-4 border duration-200 hover:border-blue-900 py-3 rounded-lg' + (type === poison ? ' border-blue-900' : ' border-blue-400')} key={typeIndex}>
               <p className='capitalize'>{type.replaceAll('_', ' ')}</p>
             </button>
           )
@@ -132,20 +129,23 @@ export default function Generator() {
 
       {/*03 Header Selection. For the Scheme Goals*/}
       <Header index={'03'} title={'Become Juggernaut'} description={'Select your ultimate object.'} />
-      <div className='grid grid-cols-3 gap-4'>
+      <div className='grid grid-cols-1 sm:grid-cols-3 gap-4'>
         {Object.keys(SCHEMES).map((scheme, schemeIndex) => {
           // As we did in the workout selection we are gonna create an arrow functin to set the goals useState function and we are gonna conditionally style the buttons when they are clicked and selected. 
           return (
             <button onClick={() => {
               // Set the setGoal useState variable with the scheme values, which is the value of the clicked button. 
               setGoal(scheme)
-            }} className={'bg-slate-950 border duration-200 hover:border-blue-900 py-3 rounded-lg' + (scheme === goal ? ' border-blue-900' : ' border-blue-400')} key={schemeIndex}>
+            }} className={'bg-slate-950 px-4 border duration-200 hover:border-blue-900 py-3 rounded-lg' + (scheme === goal ? ' border-blue-900' : ' border-blue-400')} key={schemeIndex}>
               <p className='capitalize'>{scheme.replaceAll('_', ' ')}</p>
             </button>
           )
         }
         )}
       </div>
+
+      {/*Calling the Button component. The updateWorkout is passed then as a props to the Button compoentns, and when the Formulate button is clicked, the updateWorkout is called and the workout built.*/}
+      <Button func={updateWorkout} text={'Formulate'}></Button>
 
     </SectionWrapper>
   )

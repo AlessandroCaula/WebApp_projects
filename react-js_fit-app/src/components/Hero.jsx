@@ -1,4 +1,5 @@
 import React from 'react'
+import Button from './Button'
 
 // The advantage of JSX is that it allows to have JavaScript written inside the HTML code. 
 // Funciton Component. It always have the same name of the file. It always start with a capital letter. 
@@ -13,9 +14,7 @@ export default function Hero() {
         <img className='w-[500px] lg:w-[700px] 2xl:w-[900px]' src='\SWOLE_Home_2.svg' />
       </div>
       <p className='text-sm md:text-base font-light'>I hereby acknowledge that I may become so <span className='text-blue-400 font-medium'>comically massive</span>, my reflection will need a panoramic mode. I accept the risks of developing a neck as wide as my social circle, doors as mortal enemies, and the constant fear of being mistaken for a <span className='text-blue-400 font-medium'>walking protein shake</span></p>
-      <button className='px-8 py-4 rounded-md border-[2px] bg-slate-950 border-blue-400 border-solid blueShadow duration-200'>
-        <p>Accept & Begin</p>
-      </button>
+      <Button text={'Accept & Begin'}></Button>
     </div>
   )
 }
