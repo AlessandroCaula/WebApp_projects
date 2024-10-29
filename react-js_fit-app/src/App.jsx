@@ -25,7 +25,10 @@ function App() {
     if (muscles.length < 1) {
       return;
     }
+    console.log('Generating the workout');
+    // Calling the generateWorkout function in the Function.js here. 
     let newWorkout = generateWorkout({ poison, muscles, goal });
+    // Set the workout.
     setWorkout(newWorkout);
   }
 

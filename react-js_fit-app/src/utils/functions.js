@@ -1,19 +1,18 @@
-import { EXERCISES, SCHEMES, TEMPOS, WORKOUTS } from "./swoldier";
-
-const exercises = exercisesFlattener(EXERCISES);
+import { EXERCISES, SCHEMES, TEMPOS, WORKOUTS } from "./swoldier"
+const exercises = exercisesFlattener(EXERCISES)
 
 // Creating a function for generating the workout.
 // !!! The export keyword is very important, in order to access this function from the other components. 
 // !!! This function is going to take everything that the user has decided from the home screen, the Generator component, and is going to create a workout. 
 export function generateWorkout(args) {
     // Destructuring out all the arguments that are passed to this function. These arguments are the useState variables used in the Generator to define the workout.
-    const { poison: workout, goal, muscles } = args;
+    const { muscles, poison: workout, goal } = args
     // Retrieve all the exercises as the EXERCISES keys. exer will be an array that contains the keys for the different exercises.
     let exer = Object.keys(exercises);
     // Filter out and retrieve only the keys from the exer array where the corresponding 'environment' property in the exercises object is NOT "home".
     //.meta.environment: This accesses the meta property of the exercises[key] object and specifically checks the environment property.
     exer = exer.filter((key) => exercises[key].meta.environment !== "home");
-    let includeTracker = [];
+    let includedTracker = [];
     let numSets = 5;
     let listOfMuscles;
 
@@ -29,7 +28,7 @@ export function generateWorkout(args) {
     // Converting the set to an Array.
     let arrOfMuscles = Array.from(listOfMuscles);
     let scheme = goal;
-    
+
     // !!! The .reduce() method is used to accumulate a single output value from an array by processing each element in sequence. It takes two main arguments:
     // - Accumulator function: A function that defines how to combine each element with the accumulated result.
     // - Initial value (optional): The starting value of the accumulator. If not providede, the first element of the array is used as the initial value, and the process starts from the second element.
@@ -46,7 +45,7 @@ export function generateWorkout(args) {
             return [
                 ...acc,
                 ...[...Array(parseInt(curr)).keys()].map((val) =>
-                    index === 0 ? "compund" : "accessory"
+                    index === 0 ? "compound" : "accessory"
                 ),
             ];
         }, [])
@@ -80,15 +79,15 @@ export function generateWorkout(args) {
                 // A boolean variable, exerciseHasRequiredMuscle, is initialized to false.
                 // The for loop iterates over the muscles associated with the current exercise (exercises[curr].muscles).
                 // If any of the muscles are found in the listOfMuscles (which is a Set of muscles defined earlier), exerciseHasRequiredMuscle is set to true.
-                let exerciseHasRequiredMuscles = false;
+                let exerciseHasRequiredMuscle = false;
                 for (const musc of exercises[curr].muscles) {
                     if (listOfMuscles.has(musc)) {
-                        exerciseHasRequiredMuscles = true;
+                        exerciseHasRequiredMuscle = true;
                     }
                 }
                 // If exerciseHasRequiredMuscle is true, it returns a new object that includes: A spread of the current acc (to keep previously accumulated exercises). A new property based on the exercise type (exercises[curr].type), which is either "compound" or "accessory".
                 // Inside this property, it also spreads the current exercises of that type and adds the current exercise (curr) with its details from the exercises object.
-                return exerciseHasRequiredMuscles
+                return exerciseHasRequiredMuscle
                     ? {
                         // A spread of the current acc (to keep previously accumulated exercises).
                         ...acc,
@@ -104,30 +103,30 @@ export function generateWorkout(args) {
             },
             { compound: {}, accessory: {} }
         );
-    
+
     // We are gonna generate a workout (stored in genWOD) by iterating over each item in sets, where each item specifies a setType (either "compound" or "accessory") and a muscleGroup (the target muscle group for that set).
     // sets.map(({ setType, muscleGroup }) => {...})
     // This uses the map function to iterate over each item in sets. Each set object has two properties. 
     // - setType: indicates whether the set should use "compound" or "accessory" exercises.
     // - muscleGroup: the specific muscle group targeted in this set.
     const genWOD = sets.map(({ setType, muscleGroup }) => {
-        const data = 
+        const data =
             // Based on setType, this line selects the appropriate group of exercises. If setType is "compound", it assigns compoundExercises to data. If setType is "accessory", it assigns accessoryExercises.
             // This ensures that each set draws exercises from the correct category.
             setType === "compound" ? compoundExercises : accessoryExercises;
         // filteredObj is created by reducing data (the selected group of exercises) to include only those exercises that: - Are not already in includedTracker (a list of exercises that have already been used, which prevents duplication). Do include the specified muscleGroup in their muscles array.
         // After the reduction, filteredObj contains only those exercises from data that target the specific muscleGroup and haven't already been used in this workout (includedTracker).
-        const filteredObj = Object.keys(data).reduce((acc, curr) =>{
+        const filteredObj = Object.keys(data).reduce((acc, curr) => {
             if (
                 // includedTracker.includes(curr): Checks if the current exercise (curr) has already been used. If true, it skips adding this exercise to filteredObj.
-                includeTracker.includes(curr) || 
+                includedTracker.includes(curr) ||
                 // !data[curr].muscles.includes(muscleGroup): Checks if the exercise doesn’t include the required muscleGroup. If the exercise doesn't target the specified muscle group, it is also skipped.
                 !data[curr].muscles.includes(muscleGroup)
             ) {
                 return acc;
             }
             // If neither condition is met, it adds the current exercise (curr) to filteredObj.
-            return {acc, [curr]: exercises[curr] };
+            return { ...acc, [curr]: exercises[curr] };
         }, {});
         // Create filteredDataList, an array of keys (exercise names) from filteredObj
         // filteredObj contains only exercises from the currently selected setType (either compound or accessory) that match the targeted muscle group and haven't been used in this workout yet.
@@ -137,37 +136,37 @@ export function generateWorkout(args) {
         // This backup list is useful if filteredDataList doesn't have a suitable exercise, allowing the function to pick an alternative from the other set type.
         const filteredOppList = Object.keys(
             setType === "compound" ? accessoryExercises : compoundExercises
-        // Filter out any exercises that have already been used in the workout (sotred in includedTracker), ensuring they aren't duplicated.
-        ).filter((val) => !includeTracker.includes(val));
+            // Filter out any exercises that have already been used in the workout (sotred in includedTracker), ensuring they aren't duplicated.
+        ).filter((val) => !includedTracker.includes(val));
 
         // Randomly select an exercise from filteredDataList (the primary pool) or, if that list is empty, falls back to selecting one from filteredOppList (the backup pool). 
         let randomExercise =
             // Pick a random item from filteredDataList using Math.floor(Math.random() * filteredDataList.length).
-            filteredDataList [
-                Math.floor(Math.random() * filteredDataList.length)
-            ] || 
+            filteredDataList[
+            Math.floor(Math.random() * filteredDataList.length)
+            ] ||
             // Doing the same thing as above, but with filteredOppList, ensuring an exercise is still chosen if filteredDataList is empty.
             filteredOppList[
-                Math.floor(Math.random() * filteredOppList.length)
+            Math.floor(Math.random() * filteredOppList.length)
             ];
-        
+
         if (!randomExercise) {
             return {};
         }
 
         // Assign repsOrDuraction a value based on whether the selected randomExercise should be measured in repetitions (reps) or duration (e.g. seconds).
-        let repsOrDuraction = 
+        let repsOrDuraction =
             // Checks if the exercise uses repetitions (reps). If it does, it executes the true case; otherwise, it defaults to the false case, which sets a duration.
             // If unit === "reps" (repetitions) calculates a random rep count within the range defined by SCHEMES[scheme].repRanges
             exercises[randomExercise].unit === "reps"
                 // Math.min(...SCHEMES[scheme].repRanges) gets the minimum rep value.
                 ? Math.min(...SCHEMES[scheme].repRanges) +
                 Math.floor(
-                    Math.random() * 
+                    Math.random() *
                     // Math.max(...SCHEMES[scheme].repRanges) gets the maximum rep value
-                    (Math.max(...SCHEMES[scheme].repRanges) - 
+                    (Math.max(...SCHEMES[scheme].repRanges) -
                         Math.min(...SCHEMES[scheme].repRanges))
-                ) + 
+                ) +
                 // Adds 4 additional reps if the exercise type is accessory, while compound exercises receive the base random rep count.
                 (setType === "accessory" ? 4 : 0)
                 // If unit !== "reps" (Duration):
@@ -182,7 +181,7 @@ export function generateWorkout(args) {
                 .split(" ")
                 // Sums the numbers, giving the total time per repetition in seconds.
                 .reduce((acc, curr) => acc + parseInt(curr), 0);
-                // Checks if the total workout time for the exercise (based on tempo and reps) exceeds 85 seconds.
+            // Checks if the total workout time for the exercise (based on tempo and reps) exceeds 85 seconds.
             if (tempoSum * parseInt(repsOrDuraction) > 85) {
                 repsOrDuraction = Math.floor(85 / tempoSum);
             }
@@ -191,8 +190,8 @@ export function generateWorkout(args) {
             // Set to nearest 5 seconds.
             repsOrDuraction = Math.ceil(parseInt(repsOrDuraction) / 5) * 5;
         }
-        // Adds randomExercise to includeTracker, keeping track of selected exercises to avoid repetitions. 
-        includeTracker.push(randomExercise);
+        // Adds randomExercise to includedTracker, keeping track of selected exercises to avoid repetitions. 
+        includedTracker.push(randomExercise);
 
         // Creates an object for a workout set with key details about the selected exercise. 
         return {
@@ -212,39 +211,39 @@ export function generateWorkout(args) {
 
     // Filter out any empty objects from genWOD, which is the array of workout sets generated earlier. 
     return genWOD.filter(
-        (element) => Object.keys(element).lenght > 0
+        (element) => Object.keys(element).length > 0
     );
 }
 
 // Define the function that takes an array and shuffles its elements in a random order. It's based on the Fisher-Yates shuffle algorithm, which ensures a fair distribution of elements.
 function shuffleArray(array) {
-    for (let i = array.lenght - 1; i > 0; i++) {
+    for (let i = array.length - 1; i > 0; i--) {
         let j = Math.floor(Math.random() * (i + 1))
         let temp = array[i]
         array[i] = array[j]
         array[j] = temp
     }
     return array
-} 
+}
 
 // Function that takes a complex object of exercises and creates a flattened version, restructuring it so that each exercise variant is treated as a separte entry.
-function exercisesFlattener(exerciseObj) {
+function exercisesFlattener(exercisesObj) {
     const flattenedObj = {}
 
-    for (const [key, val] of Object.entries(exerciseObj)) {
+    for (const [key, val] of Object.entries(exercisesObj)) {
         if (!("variants" in val)) {
             flattenedObj[key] = val
         } else {
             for (const variant in val.variants) {
-                let variantName = variant + "_" + key;
+                let variantName = variant + "_" + key
                 let variantSubstitutes = Object.keys(val.variants).map((element) => {
                     return element + ' ' + key
                 }).filter(element => element.replaceAll(' ', '_') !== variantName)
 
                 flattenedObj[variantName] = {
-                    ...val, 
-                    description: val.description + '__' + val.variants[variant],
-                    substitutes : [
+                    ...val,
+                    description: val.description + '___' + val.variants[variant],
+                    substitutes: [
                         ...val.substitutes, variantSubstitutes
                     ].slice(0, 5)
                 }
@@ -255,9 +254,9 @@ function exercisesFlattener(exerciseObj) {
 }
 
 
-////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////
+// ////////////////////////////////////////////////////////////////////////
+// ////////////////////////////////////////////////////////////////////////
+// ////////////////////////////////////////////////////////////////////////
 
 // import { EXERCISES, SCHEMES, TEMPOS, WORKOUTS } from "./swoldier"
 // const exercises = exercisesFlattener(EXERCISES)
