@@ -4,11 +4,13 @@ import React from 'react'
 export default function SectionWrapper(props) {
   // Destructuring the props. !!! Order of props does not matter. !!! Prop names in the child component must match what the parent provides. !!! If you don't know all the props, you can use the rest operator (...rest) to capture any extra props.
   // The children is the Header component passed from the Generator component. 
-  const { children, header, title } = props;
+  // Passing the id, which will be used when the Accept & Begin control is clicked, and the page will automatically scroll to the nex sectionWrapper, which is the one containing the Generator component. 
+  const { children, header, title, id } = props;
   // Another way of accessing the props can be: props.children - props.header - propr.title 
   return (
     // Now we can render the children contents. // The flex alone is for the display: flex
-    <section className='min-h-screen flex flex-col gap-10'>
+    // passing the id, that will be used to auto-scroll the page to the Generator when the button Accept and Continue is clicked. 
+    <section id={id} className='min-h-screen flex flex-col gap-10'>
       {/*At the top we are going to have a div, which is going to be the banner at the top of the section*/}
       <div className='bg-slate-950 py-10 flex flex-col gap-2 justify-center items-center p-4'>
         <p className='uppercase font-medium'>{header}</p>

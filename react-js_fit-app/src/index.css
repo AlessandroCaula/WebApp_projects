@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Set the auto-scrool behaviour to smooth*/
+html {
+  scroll-behavior: smooth;
+}
+
 /*Apply the Popping imported Font-family to everything in the project*/
 * {
   font-family: "Poppins", sans-serif;

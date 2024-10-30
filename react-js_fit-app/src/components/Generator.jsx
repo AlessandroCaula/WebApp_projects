@@ -66,7 +66,8 @@ export default function Generator(props) {
     // So for example, when just created, if you write something between the SectionWrapper tags, it won't be rendered on the webpage. Only the things inside the SectionWrapper tag will be rendered.
     // The way that we can then get the childre contet to display is via props. !!! So the children content is just anything that is in the parent components wrapped between the tags of the children component. 
     // We are also gonna pass some content via attribute style props (in this case for some banners, like the header one). Passing some values as JavaScript code, some variables. For the header a string, for the title an array fo strings.
-    <SectionWrapper header={"generate your workout"} title={["It's", "Huge", "o'clock"]}>
+    // !! In the generator SectionWrapper, define the id that will be used to auto-scroll the page when the Accept & Begin button is clicked. 
+    <SectionWrapper id={'generate'} header={"generate your workout"} title={["It's", "Huge", "o'clock"]}>
       {/*If you put something here, it will be passed as props to the (children) SectionWrapper component*/}
       {/*Render the Header component from the SectionWrapper component. The Header component will be "passed" and rendered from the SectionWrapper*/}
       <Header index={'01'} title={'Pick your poison'} description={'Select the workout you whish to endure.'} />
