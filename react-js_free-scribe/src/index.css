@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*Tagging the entire file and define the font style that will be used through the web app*/
+* {
+  font-family: 'Open Sans', sans-serif;
+}
+
+/*Tagging the h1, h2, h3 elements and the bold text and give them a Poppin Font family*/
+h1, h2, h3, .bold {
+  font-family: 'Poppins', sans-serif;
+}
