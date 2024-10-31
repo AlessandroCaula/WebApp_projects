@@ -1,8 +1,7 @@
-# React + Vite
+# Fit App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Project created with the React JS and Tailwind framework. This WebApp allows you to select specific muscles or muscle group to train and suggests you different exercise and reps to perform for your training.
 
-Currently, two official plugins are available:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Deployment website:
+https://swole-ac.netlify.app
