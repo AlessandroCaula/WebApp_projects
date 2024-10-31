@@ -50,9 +50,12 @@ function App() {
         window.location.href = '#generate';
         // DO THIS WHEN THE isAccepted Variable is changed. 
     }, [isToScroll]);
-
-    // // Define another useEffect so to auto-scroll to the workout page. 
-    // useEffect(() => )
+    
+    // Define another useEffect so to auto-scroll to the workout page. 
+    useEffect(() => {
+        // Set the id which will be used for autoscrolling the page when the Workout Button is clicked.
+        window.location.href = '#workout';
+    }, [workout]);
 
     // Importing the components inside the Hub of our application
     return (

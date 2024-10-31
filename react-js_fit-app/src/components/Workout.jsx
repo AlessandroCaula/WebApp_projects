@@ -9,7 +9,7 @@ export default function Workout(props) {
 
   return (
     // Using the sectin wrapper
-    <SectionWrapper header={"welcome to"} title={["The", "DANGER", "zone"]}>
+    <SectionWrapper id={'workout'} header={"welcome to"} title={["The", "DANGER", "zone"]}>
       {/*Designing the workout layuot*/}
       <div className='flex flex-col gap-4'>
         {/*Looping through all the elements (exercises) of the workout and create an Exercise Card for each of them.*/}
