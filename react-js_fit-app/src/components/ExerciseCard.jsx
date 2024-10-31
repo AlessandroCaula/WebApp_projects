@@ -27,6 +27,18 @@ export default function ExerciseCard(props) {
                 <h3 className='text-slate-400 text-sm'>Muscle Group</h3>
                 <p className='capitalize'>{exercise.muscles.join(' & ')}</p>
             </div>
+
+            <div className='flex flex-col bg-slate-950 rounded gap-2'>
+                {exercise.description.split('___').map((val) => {
+                    return (
+                        <div className='text-sm'>
+                            {/*Rendering out the description of the exercise to do*/}
+                            {val}
+                        </div>
+                    )
+                })}
+            </div>
+
             <div className='grid grid-cols-2 sm:grid-cols-4 sm:place-items-center gap-2'>
                 {/*We are gonna map out this array as info*/}
                 {['reps', 'rest', 'tempo'].map((info) => {
