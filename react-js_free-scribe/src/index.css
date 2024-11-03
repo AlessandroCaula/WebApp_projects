@@ -11,3 +11,14 @@
 h1, h2, h3, .bold {
   font-family: 'Poppins', sans-serif;
 }
+
+/*Create a new style for the special buttons*/
+.specialBtn {
+  background: white;
+  box-shadow: 0px 14px 55px rgba(96, 165, 255, 0.35);
+  transition-duration: 200ms;
+}
+/*Define the hover effect of the special button*/
+.specialBtn:hover {
+  opacity: 0.8;
+}
