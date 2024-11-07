@@ -9,7 +9,7 @@ export default function FileDisplay(props) {
             <h1 className='font-semibold text-4xl sm:text-5xl md:text-6xl'>Your <span className='text-blue-400 bold'>File</span></h1>
             <div className='mx-auto flex flex-col text-left my-4'>
                 <h3 className='font-semibold'>Name</h3>
-                <p>{file.name}</p>
+                <p>{file ? file.name : 'Custom audio'}</p>
             </div>
             <div className='flex items-center justify-between gap-4'>
                 <button onClick={handleAudioReset} className='text-slate-400 hover:text-blue-600'>Reset</button>

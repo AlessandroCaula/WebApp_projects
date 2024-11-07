@@ -26,7 +26,7 @@ export default function HomePage(props) {
         // Try and catch block to catch any exception. 
         try {
             // Allow the web application to access a user's media devices, such as the camera and the microphone in this case. In this case we want to access only the audio, not the video. 
-            const streamData = navigator.mediaDevices.getUserMedia({
+            const streamData = await navigator.mediaDevices.getUserMedia({
                 audio: true,
                 video: false
             });
@@ -46,15 +46,15 @@ export default function HomePage(props) {
         // Using useRef allows you to store a reference to the MediaRecorder instance that persists across renders without triggering re-renders. 
         // In React, useRef is commonly used for mutable values that shouldn't trigger re-renders. A MediaRecorder instance can change its state (start, pause, stop recording) without the need to re-reder the component. Storing it in a ref lets you control it directly without causing unnecessary updates in the component's state.
         mediaRecorder.current = media;
+        mediaRecorder.current.start();
         let localAudioChunks = [];
         mediaRecorder.current.ondataavailable = (event) => {
             // Handle the case in which there is no data. 
-            if (typeof event.data === 'undefined') { return; }
-            if (typeof event.data.size === 0) { return; }
+            if (typeof event.data === 'undefined') { return }
+            if (typeof event.data.size === 0) { return }
             // Pushing the data to the localAudioChunks. 
             localAudioChunks.push(event.data);
         }
-
         // Setting the Audio Chunks State. 
         setAudioChunks(localAudioChunks);
     }
@@ -69,18 +69,17 @@ export default function HomePage(props) {
         // Stopping the media recorder.
         mediaRecorder.current.stop();
         // onStop action create a Blob object.
-        mediaRecorder.current.onStop = () => {
+        mediaRecorder.current.onstop = () => {
             // A Blob (Binary Large Object) object represents binary data in a specific format, often used for files or multimedia data like images, audio, or video. 
             // The audioBlob can now be used for audio playback, downloading, or further processing. 
             const audioBlob = new Blob(audioChunks, { type: mimeType });
+            
+            console.log('stopping');
 
-            // Try delaying the state updates to ensure React applies them after onStop. STILL DOES NOT UPDATES THIS VARIABLES WHEN STOP RECORDING IS CLICKED.
-            Promise.resolve().then(() =>{
-                // Reset the useState Hooks when stopping the recording
-                setAudioStream(audioBlob);
-                setAudioChunks([]);
-                setDuration(0);
-            });
+            // Reset the useState Hooks when stopping the recording
+            setAudioStream(audioBlob);
+            setAudioChunks([]);
+            setDuration(0);
         }
     }
 

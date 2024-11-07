@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Header from "./components/Header"
 import FileDisplay from "./components/FileDisplay";
 import HomePage from "./components/Homepage";
@@ -17,6 +17,11 @@ function App() {
     setFile(null);
     setAudioStream(null);
   }
+
+  // Since the audioStream is not updated when start and stop recording are executed in the HomePage, and the FileDisplayed is not rendered (since the audioStream is not updated) we will use a useEffect Hook.
+  useEffect(() => {
+    console.log(audioStream);
+  }, [audioStream])
 
   return (
     <div className="flex flex-col max-w-[1000px] mx-auto w-full">
