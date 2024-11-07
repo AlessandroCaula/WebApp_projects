@@ -1,7 +1,7 @@
 import { useState } from "react"
 import Header from "./components/Header"
-import HomePage from "./components/HomePage"
 import FileDisplay from "./components/FileDisplay";
+import HomePage from "./components/Homepage";
 
 function App() {
   // useState variables

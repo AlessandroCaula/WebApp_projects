@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 
-export default function Homepage(props) {
+export default function HomePage(props) {
     // Deconstruct the props passed to the Homepage.
     const { setFile, setAudioStream } = props;
 
@@ -98,12 +98,21 @@ export default function Homepage(props) {
     return (
         <main className="flex-1 p-4 flex flex-col gap-3 sm:gap-4 md:gap-5 justify-center text-center pb-20">
             <h1 className='font-semibold text-5xl sm:text-6xl md:text-7xl'>Free<span className='text-blue-400 bold'>Scribe</span></h1>
-            <h3 className='font-medium md:text-lg'>Record <span
+            <h3 className='font-medium md:text-lg'> Record <span
                 className='text-blue-400'>&rarr;</span> Transcribe <span
                     className='text-blue-400'>&rarr;</span> Translate</h3>
             <button className='flex items-center text-base justify-between gap-4 mx-auto w-72 max-w-full my-4 specialBtn px-4 py-2 rounded-lg'>
-                <p className='text-blue-400'>Record</p>
-                <i className="fa-solid fa-microphone"></i>
+                {/*If the recording is active "recordingStatus" is inactive then show the Record string, otherwis show the Stop Recording*/}
+                <p className='text-blue-400'> {recordingStatus === 'inactive' ? 'Record' : `Stop Recording`} </p>
+                {/*Show the time that is passed recorind*/}
+                <div className='flex items-center gap-2'>
+                    {/*Conditionally rendering the timer. If duration exist, show the timer.*/}
+                    {duration && (
+                        // Show the duration in seconds.
+                        <p>{duration}s</p>
+                    )}
+                    <i className="fa-solid fa-microphone"></i>
+                </div>
             </button>
             {/*Or upload your file. It can only accept mp3 or wave recording files*/}
             {/*- <input> element: which is often used for taking user input, such as text or file uploads.
