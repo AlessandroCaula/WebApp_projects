@@ -73,8 +73,14 @@ export default function HomePage(props) {
             // A Blob (Binary Large Object) object represents binary data in a specific format, often used for files or multimedia data like images, audio, or video. 
             // The audioBlob can now be used for audio playback, downloading, or further processing. 
             const audioBlob = new Blob(audioChunks, { type: mimeType });
-            setAudioStream(audioBlob);
-            setAudioChunks([]);
+
+            // Try delaying the state updates to ensure React applies them after onStop. STILL DOES NOT UPDATES THIS VARIABLES WHEN STOP RECORDING IS CLICKED.
+            Promise.resolve().then(() =>{
+                // Reset the useState Hooks when stopping the recording
+                setAudioStream(audioBlob);
+                setAudioChunks([]);
+                setDuration(0);
+            });
         }
     }
 
@@ -96,22 +102,24 @@ export default function HomePage(props) {
     });
 
     return (
-        <main className="flex-1 p-4 flex flex-col gap-3 sm:gap-4 md:gap-5 justify-center text-center pb-20">
+        <main className="flex-1 p-4 flex flex-col gap-3 sm:gap-4 justify-center text-center pb-20">
             <h1 className='font-semibold text-5xl sm:text-6xl md:text-7xl'>Free<span className='text-blue-400 bold'>Scribe</span></h1>
             <h3 className='font-medium md:text-lg'> Record <span
                 className='text-blue-400'>&rarr;</span> Transcribe <span
                     className='text-blue-400'>&rarr;</span> Translate</h3>
-            <button className='flex items-center text-base justify-between gap-4 mx-auto w-72 max-w-full my-4 specialBtn px-4 py-2 rounded-lg'>
+            {/*Add the recording Button. When clicked, start recording if it is not recording or stop recording when it is recording*/}
+            <button onClick={recordingStatus === 'recording' ? stopRecording : startRecording} className='flex items-center text-base justify-between gap-4 mx-auto w-72 max-w-full my-4 specialBtn px-4 py-2 rounded-lg'>
                 {/*If the recording is active "recordingStatus" is inactive then show the Record string, otherwis show the Stop Recording*/}
-                <p className='text-blue-400'> {recordingStatus === 'inactive' ? 'Record' : `Stop Recording`} </p>
+                <p className='text-blue-400'> {recordingStatus === 'inactive' ? 'Record' : 'Stop Recording'} </p>
                 {/*Show the time that is passed recorind*/}
                 <div className='flex items-center gap-2'>
                     {/*Conditionally rendering the timer. If duration exist, show the timer.*/}
-                    {duration && (
+                    {/* {duration && (
                         // Show the duration in seconds.
-                        <p>{duration}s</p>
-                    )}
-                    <i className="fa-solid fa-microphone"></i>
+                        <p className='text-sm'>{duration}s</p>
+                    )} */}
+                    {/*Addig a conditions to the icon. When is recording the icon change color to red.*/}
+                    <i className={"fa-solid duration-200 fa-microphone" + (recordingStatus === 'recording' ? " text-rose-300" : "")}></i>
                 </div>
             </button>
             {/*Or upload your file. It can only accept mp3 or wave recording files*/}
