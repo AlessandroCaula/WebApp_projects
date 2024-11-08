@@ -35,9 +35,10 @@ function App() {
       <section className="min-h-screen flex flex-col">
         {/*Rendering out the Header*/}
         <Header />
+        {/*Logic for the component rendering of the page (which one to show based on what data is available*/}
         {/*Conditionally render when the output exists. The we render out the Information component. This is the first thing ot chek in the rendering of the page. Otherwise, we end up rendering the other component, even if the final output exist. That's why we check it first*/}
         {/*If it does not exist we are going to check if loading exist. If it exists, we are going to render out Transcribing.*/}
-        {/*If also the Transcribing does not exist, we are going to finally renering the home page.*/}
+        {/*If also the Transcribing does not exist, we are going to finally renering the FileDisplay or the HomePage.*/}
         {output ? (
           <Information0 />
         ) : loading ? (
