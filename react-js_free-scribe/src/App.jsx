@@ -38,6 +38,7 @@ function App() {
 
     // This code sets up a Web Worker to handle background tasks for transcription without blocking the main UI
     // The useEffect hook is used to run code after the component renders.
+    // This code enables efficient, non-blocking transcription by offloading processing to a Web Worker, using onMessageReceived to handle the worker's messages. This setup helps to keep the app responsive, especially for tasks like transcriprion that can be resource-demanding. 
     useEffect(() => {
         // If the worker does not exists. Create it. 
         if (!worker.current) {
@@ -49,24 +50,30 @@ function App() {
         // Logic to allow us to let the Web Worker and the main app to communicate.
         // Function onMessageReceived to handle messages received from the worker.
         const onMessageReceived = async (e) => {
+            // e.data.type represents the type of message sent by the worker. The switch statement responds based on e.data.type.
             switch (e.data.type) {
+                // Indicating a downloading has started.
                 case 'DOWNLOADING':
                     setDownloading(true);
                     console.log('DOWNLOADING');
                     break;
+                // Indicates that the app is loading some resources.
                 case 'LOADING':
                     setLoading(true);
                     console.log('LOADING');
                     break;
+                // Updating the app with the transcription results received from the worker by setting setOutput(e.data.results).
                 case 'RESULT':
                     setOutput(e.data.results);
                     break;
+                // Signals that the transription or processing is finished. 
                 case 'INFERENCE_DONE':
                     setFinished(true);
                     console.log('INFERENCE_DONE');
                     break;
             }
         }
+        // addEventListener allows the main app to listen for messages from the worker. 
         // This is the message event. 
         worker.current.addEventListener('message', onMessageReceived)
 
@@ -75,24 +82,41 @@ function App() {
     });
 
     // Function to get the audio buffer from the file or the transcription. 
+    // This function reads audio from a file, decodes it, and returns the audio data in a specific format.
+    // This method, takes a file, reads it as an audio array, decodes it, and returns the audio data in a format that can be easily processed.
     async function readAudioFrom(file) {
+        // The sampling rate is 1600 Hz, which is quite low (usually audio is sampled at 44100 Hz or higher, for higher quality). This low sample rate could be used to reduce file size.
         const sampling_rate = 1600;
+        // An AudioContext is created with this sampling, rate, allowing for audio processing. AudioContext is a part of the Web Audio API used for creating and managing audio content. 
         const audioCTX = new AudioContext({ sampleRate: sampling_rate });
+        // The file.arrayBuffer() method reads the file  data as an ArrayBuffer. This buffer is a low-level representation of binary data, which is easier to process and decode. 
         const response = await file.arrayBuffer();
+        // audioCTX.decodeAudioData(response) decodes the buffer data into audio samples that the AudioContext can work with, converting it to a formati usable by the Web Audio API.
         const decoded = await audioCTX.decodeAudioData(response);
+        // The getChannelData(0) method extracts the audio data for a single channels (in this case the first channel or the left channel if it is stereo.)
+        // getChannelData returns the audio data as a Float32Array, which is an array of 32-bit floating-point values representing audio sample amplitudes over time.
         const audio = decoded.getChannelData(0);
         return audio;
     }
 
+    // This function initiates the transcription process by reading audio data from an uploaded file or a live audio stream, then sends it to a Web Worker for processing. 
+    // In short, this function prepares the audio data and sends it, along with the model name, to the Web Worker. The worker will then handle the transcription in the background. This design keeps the main thread responsive by offloading the transcription work to a separate thread, which avoids blocking the UI.
     async function handleFormSubmission() {
+        // Checks if there is a file or an audioStream to process. 
         if (!file && !audioStream) { return }
 
+        // The readAudioFrom function (from your previous code) is called with either the file or audioStream, whichever is available.
         let audio = await readAudioFrom(file ? file : audioStream);
-        const model_name = `openai/whisper-tiny.en`
+        // This specifies the model name, openai/whisper-tiny.en, which could be a version of OpenAI's Whisper model fine-tuned for English transcription.
+        const model_name = `openai/whisper-tiny.en`;
 
+        // Sends a message to the Web Worker, asking it to start processing. 
         worker.current.postMessage({
-            type: MessageTypes.INFERENCE_REQUEST, 
-            audio, 
+            // The type of message sent, which likely tells the worker to start an inference (transcription) task.
+            type: MessageTypes.INFERENCE_REQUEST,
+            // The audio data in a format that the worker can process.
+            audio,
+            // The model name, instructing the worker on which transcription model to use.
             model_name
         });
     }
