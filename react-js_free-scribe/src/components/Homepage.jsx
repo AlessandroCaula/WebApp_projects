@@ -26,6 +26,7 @@ export default function HomePage(props) {
         // Try and catch block to catch any exception. 
         try {
             // Allow the web application to access a user's media devices, such as the camera and the microphone in this case. In this case we want to access only the audio, not the video. 
+            // !!! The await pauses the function's execution until a promise is fullfilled (resolved or rejected).
             const streamData = await navigator.mediaDevices.getUserMedia({
                 audio: true,
                 video: false
