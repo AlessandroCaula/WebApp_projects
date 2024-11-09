@@ -22,3 +22,29 @@ h1, h2, h3, .bold {
 .specialBtn:hover {
   opacity: 0.8;
 }
+
+/*Tagging the loadings (which have values from 0 to 2) bars in the Transcribing componen, making them like a waiting page.*/
+.loading {
+  animation: width 5s linear infinite;
+  margin-right: auto;
+}
+.loading1 {
+  animation-delay: -4s;
+}
+.loading2 {
+  animation-delay: -2s;
+}
+
+@keyframes width {
+  0%{width: 100%;}
+  10%{width: 73%;}
+  20%{width: 35%;}
+  30%{width: 37%;}
+  40%{width: 48%;}
+  50%{width: 65%;}
+  60%{width: 46%;}
+  70%{width: 38%;}
+  80%{width: 66%;}
+  90%{width: 76%;}
+  100%{width: 100%;}
+}
