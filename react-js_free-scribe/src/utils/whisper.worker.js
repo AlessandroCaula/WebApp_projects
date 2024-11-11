@@ -46,12 +46,13 @@ self.addEventListener('message', async (event) => {
 
 // 3) Transcribe function. This function performs the transcription of audio. 
 async function transcribe(audio) {
-    // Call the sendLoadingMessage to update the main thread on the transcription's loading state. 
+    // Loading Message. Call the sendLoadingMessage to update the main thread on the transcription's loading state. 
     sendLoadingMessage('loading');
 
     let pipeline;
 
     try {
+        // Pipeline Loading. Uses MyTranscriptionPipeline.getInstance() to get or initialize the ASR pipeline. 
         pipeline = await MyTranscriptionPipeline.getInstance(load_model_callback)
     } catch (err) {
         console.log(err.message);
@@ -63,20 +64,28 @@ async function transcribe(audio) {
 
     const generationTracker = new GenerationTracker(pipeline, stride_length_s);
 
+    // ASR Inference. Runs the pipeline on the audio with specific settings. 
     await pipeline(audio, {
         top_k: 0,
         do_sample: false,
+        // Length of each audio chunk for processing. 
         chunk_length: 30,
+        // Helping handle overlap between chunks to ensure smoother transcription. 
         stride_length_s,
         return_timestamps: true,
+        // Functions that handle chunk processing and real-time results.
         callback_function: generationTracker.callbackFunction.bind(generationTracker),
+        // Functions that handle chunk processing and real-time results.
         chunk_callback: generationTracker.bind(generationTracker)
     })
 
+    // Result Sending. After processing, use generationTracker.sendFinalResult() to indicate the transcription is complete.
     generationTracker.sendFinalResult();
 }
 
-
+// 4) Load model callback function. This function is called during model loading. It:
+// - Checks if the loading status is "progress"
+// - Sends download progress details (file, progress, loaded, and total) back to the main thread using sendDownloadingMessage.
 async function load_model_callback(data) {
     const { status } = data;
 
@@ -86,13 +95,17 @@ async function load_model_callback(data) {
     }
 }
 
+// 5) sendLoadingMessage and sendDownloadingMessage Functions. 
+// These utility functions send status updates to the main thread:
+// 
+// Sends the loading status.
 function sendLoadingMessage(status) {
     self.postMessage({
         type: MessageTypes.LOADING,
         status
     });
 }
-
+// Sends detailed progress info during model loading. 
 async function sendDownloadingMessage(file, progress, loaded, total) {
     self.postMessage({
         type: MessageTypes.DOWNLOADING,
@@ -103,10 +116,10 @@ async function sendDownloadingMessage(file, progress, loaded, total) {
     })
 }
 
-
+// 6) This is a utility class to manage and process chunks of transcribed data:
 class GenerationTracker {
 
-    // Class constructor.
+    // Class constructor. Accepts the pipeline and stride length, setting up data structures to store chunks and intermediate transcription data. 
     constructor(pipeline, stride_length_s) {
         this.pipeline = pipeline;
         this.stride_length_s = stride_length_s;
@@ -116,10 +129,12 @@ class GenerationTracker {
         this.callbackFunctionCounter = 0;
     }
 
+    // Send a message to the main thread when transcription is completed. 
     sendeFinalResult() {
         self.postMessage({ type: MessageTypes.INFERENCE_DONE })
     }
 
+    // Handels chunk processing, storing and formatting each chunk. It uses the ASR to tokenizer to extract text and timestamps for the audio and sends a createResultMessage.
     callbackFunction(beams) {
         this.callbackFunctionCounter += 1;
         if (this.callbackFunctionCounter % 10 !== 0) {
@@ -166,6 +181,7 @@ class GenerationTracker {
         }
     }
 
+    // Formats individual chunks with start and end timestamps. 
     processChunk(chunk, index) {
         const { text, timestamp } = chunk;
         const [start, end] = timestamp;
@@ -179,6 +195,10 @@ class GenerationTracker {
     }
 }
 
+// 7) createResultMessage and createPartialResultMessage Functions. 
+// These functions send messages back to the main thread with transcription results.
+//
+// Send full transcription results and metadata to the main thread.
 function createResultMessage(result, isDone, completedUntilTimestamp) {
     self.postMessage({
         type: MessageTypes.RESULT,
@@ -187,7 +207,7 @@ function createResultMessage(result, isDone, completedUntilTimestamp) {
         completedUntilTimestamp
     })
 }
-
+// Send partial transcription results, allowing real-time feedback during the transcription. 
 function createPartialResultMessage(result) {
     self.postMessage({
         type: MessageTypes.RESULT_PARTIAL,
