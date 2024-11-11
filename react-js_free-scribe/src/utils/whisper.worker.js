@@ -33,8 +33,9 @@ class MyTranscriptionPipeline {
 // !!!!!!!!!!!!!
 
 
-// 2) Web Worker Event Listener. The Web Worker listens for messages from the main thread. 
+// 2) Web Worker Event Listener. The Web Worker listens for messages from the main thread. Setting up a listener on self (the Web Worker instace).
 // This function listens for messages in the Web Worker.
+// Setting up an event listener that waits for messages from the main application. 
 self.addEventListener('message', async (event) => {
     const { type, audio } = event.data;
     // If the message is from an INFERENCE_REQUEST, it calls the transcribe function with the provided audio data to begin transcription. 
@@ -52,7 +53,7 @@ async function transcribe(audio) {
     let pipeline;
 
     try {
-        // Pipeline Loading. Uses MyTranscriptionPipeline.getInstance() to get or initialize the ASR pipeline. 
+        // Pipeline Loading. Uses MyTranscriptionPipeline.getInstance() to retrieve or initialize the ASR pipeline. 
         pipeline = await MyTranscriptionPipeline.getInstance(load_model_callback)
     } catch (err) {
         console.log(err.message);
@@ -62,11 +63,15 @@ async function transcribe(audio) {
 
     const stride_length_s = 5;
 
+    // An instance to the GenerationTracker class (discussed below), which manages transcription tracking. 
     const generationTracker = new GenerationTracker(pipeline, stride_length_s);
 
     // ASR Inference. Runs the pipeline on the audio with specific settings. 
+    // Call the pipeline function with the audio data and a set of configuration options. 
     await pipeline(audio, {
+        // Limit the number of outputs generated (0 means no restriction)
         top_k: 0,
+        // Disable sampling, making the transcription deterministic.
         do_sample: false,
         // Length of each audio chunk for processing. 
         chunk_length: 30,
@@ -116,14 +121,21 @@ async function sendDownloadingMessage(file, progress, loaded, total) {
     })
 }
 
-// 6) This is a utility class to manage and process chunks of transcribed data:
+// 6) This is a utility class to manage and process chunks of transcribed data.
+// this class tracks the transcription's progress, manage chunks, and sends partial and final results back to the main thread.
 class GenerationTracker {
 
     // Class constructor. Accepts the pipeline and stride length, setting up data structures to store chunks and intermediate transcription data. 
     constructor(pipeline, stride_length_s) {
+        // Properties.
+        //
+        // Reference to the transcription pipeline instance. 
         this.pipeline = pipeline;
+        // The stride length in seconds. 
         this.stride_length_s = stride_length_s;
+        // Holds raw audio data chunks.
         this.chunks = [];
+        // Used to accurately process timestamps. 
         this.time_precision = pipeline?.processor.feature_extractor.config.chunk_length / pipeline.model.config.max_source_positions;
         this.processed_chunks = [];
         this.callbackFunctionCounter = 0;
@@ -135,26 +147,41 @@ class GenerationTracker {
     }
 
     // Handels chunk processing, storing and formatting each chunk. It uses the ASR to tokenizer to extract text and timestamps for the audio and sends a createResultMessage.
+    // This function processes transcription data but only every 10 calls. When it does, it select the most confident transcription (bestBeam), decodes it, and sends an interime transcription result back to the main application. This approach makes the transcription appear responsive without overwhelming the system with too many updates.
     callbackFunction(beams) {
+        // Counter used to track how many times the function has been called. This helps in limiting how often intermediate results are generated to avoid excessive updates. 
         this.callbackFunctionCounter += 1;
+        // The callbackFunction only processes every 10th call. This thrittling mechanism reduces how often the functino runs, improving efficienty and reducing message frequency.
         if (this.callbackFunctionCounter % 10 !== 0) {
             return;
         }
 
+        // beams is an array of "beams", each representing a potential transcription candidate.
+        // bestBeam refers to the first item, which is assumed to be the highest-confidence result.
         const bestBeam = beams[0];
+        // bestBeam.output_token_ids: contains a sequence of token IDs representing the transcribed text.
+        // this.pipeline.tokenizer.decode(...): converts these token IDs into human-readable text.
+        // skip_special_tokens: true: removes any tokens used for special purposes (e.g. sentence boundaries) from the decoded output.
         let text = this.pipeline.tokenizer.decode(bestBeam.output_token_ids, {
             skip_special_tokens: true
         })
 
+        // A result object is created with:
         const result = {
+            // The decoded transcription text.
             text,
+            // The start timestamp of the transcription segment, obtained from this.getLastChunkTimeStamp()
             start: this.getLastChunkTimeStamp(),
+            // Left as undefined because it may not be determined yet.
             end: undefined
         }
 
+        // This calls createPartialResultMessage, which sends the partial transcription (result) back to the main thread.
+        // The main ap plication can display this interim result to give the user feedback as transcription progresses. 
         createPartialResultMessage(result);
     }
-
+    
+    // Processes chunks of audio data and sends timestamped results.
     chunkCallback(data) {
         this.chunks.push(data)
         const [text, { chunks }] = this.pipeline.tokenizer._decode_asr(
@@ -175,6 +202,7 @@ class GenerationTracker {
         );
     }
 
+    // Returns the timestamp of the last processed chunk.
     getLastChunkTimeStamp() {
         if (this.processed_chunks.length === 0) {
             return 0;
