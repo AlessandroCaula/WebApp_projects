@@ -79,14 +79,14 @@ function App() {
 
         // Cleanup function
         return () => worker.current.removeEventListener('message', onMessageReceived)
-    });
+    }, []);
 
     // Function to get the audio buffer from the file or the transcription. 
     // This function reads audio from a file, decodes it, and returns the audio data in a specific format.
     // This method, takes a file, reads it as an audio array, decodes it, and returns the audio data in a format that can be easily processed.
     async function readAudioFrom(file) {
         // The sampling rate is 1600 Hz, which is quite low (usually audio is sampled at 44100 Hz or higher, for higher quality). This low sample rate could be used to reduce file size.
-        const sampling_rate = 1600;
+        const sampling_rate = 3000; // 1600;
         // An AudioContext is created with this sampling, rate, allowing for audio processing. AudioContext is a part of the Web Audio API used for creating and managing audio content. 
         const audioCTX = new AudioContext({ sampleRate: sampling_rate });
         // The file.arrayBuffer() method reads the file  data as an ArrayBuffer. This buffer is a low-level representation of binary data, which is easier to process and decode. 
@@ -137,7 +137,7 @@ function App() {
                     <Transcribing />
                 ) : isAudioAvailable ? (
                     // Passing down the file or the audioStream file as well as the handleAudioReset function.
-                    <FileDisplay file={file} audioStream={audioStream} handleAudioReset={handleAudioReset} />
+                    <FileDisplay handleFormSubmission={handleFormSubmission} file={file} audioStream={audioStream} handleAudioReset={handleAudioReset} />
                 ) : (
                     // We are gonna pass the setFile and setAudioStream State variables down the Homepage component as a props.
                     <HomePage setFile={setFile} setAudioStream={setAudioStream} />

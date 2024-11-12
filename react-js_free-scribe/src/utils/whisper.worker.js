@@ -1,17 +1,19 @@
 // The Web Worker. 
-// Setting up a Web Worker to handle transcription of audi orecordings using OpenAI's Whisper model for automatic speech recognition (ASR). The transcription is handeld in chunks, allowing partial results to be sent to the main thread in treal-time. 
+// Setting up a Web Worker to handle transcription of audi orecordings using OpenAI's Whisper model for automatic speech recognition (ASR). The transcription is handeld in chunks, allowing partial results to be sent to the main thread in real-time. 
 
 // Importing the function called pipeline from a library. This will load and manage the Whisper ASR model.
-import { pipeline } from '@xenova/transformers'
+import { pipeline, env } from '@xenova/transformers'
 // Importing the message Types defined in the presets file. These types categorize the messages sent between the Web Worker and the main thread. 
 import { MessageTypes } from './presets';
+
+env.allowLocalModels = false;
 
 // 1) This class is a helper to create and manage the Whisper transcription pipeline. 
 class MyTranscriptionPipeline {
     // task: defines the type of task automatic speech recognition (ASR)
     static task = 'automatic-speech-recognition';
     // model: specified the model "whisper-tiny.en"
-    static mode = 'openai/whisper-tiny.en'; // whisper-tiny.it
+    static model = 'openai/whisper-tiny.en'; // whisper-tiny.it
     // instance: holds a single instance of the ASR pipeline to avoid re-initialization. 
     static instance = null;
 
@@ -28,7 +30,7 @@ class MyTranscriptionPipeline {
 // !!!!!!!!!!!!!
 // In an async function, the await pauses the function's execution until a promise is fullfilled (resolved or rejected).
 // - Pausing Execution: when you use await before a promise, the function pauses at that line until the promise completes. 
-// - Andling asynchronous Operation Sequentially: by waiting for each await to complete, you can handle asynchronous operations in a specific sequence, allowing the next steps to rely on the results of previous ones. 
+// - Handling asynchronous Operation Sequentially: by waiting for each await to complete, you can handle asynchronous operations in a specific sequence, allowing the next steps to rely on the results of previous ones. 
 // - Non-blocking Behaviour: even though await pauses the async function, it doesn't block the main thread (UI thread). Other code outside the async function can still run while the awaited operation completes. 
 // !!!!!!!!!!!!!
 
@@ -81,7 +83,7 @@ async function transcribe(audio) {
         // Functions that handle chunk processing and real-time results.
         callback_function: generationTracker.callbackFunction.bind(generationTracker),
         // Functions that handle chunk processing and real-time results.
-        chunk_callback: generationTracker.bind(generationTracker)
+        chunk_callback: generationTracker.chunkCallback.bind(generationTracker)
     })
 
     // Result Sending. After processing, use generationTracker.sendFinalResult() to indicate the transcription is complete.
@@ -142,7 +144,7 @@ class GenerationTracker {
     }
 
     // Send a message to the main thread when transcription is completed. 
-    sendeFinalResult() {
+    sendFinalResult() {
         self.postMessage({ type: MessageTypes.INFERENCE_DONE })
     }
 
@@ -151,7 +153,7 @@ class GenerationTracker {
     callbackFunction(beams) {
         // Counter used to track how many times the function has been called. This helps in limiting how often intermediate results are generated to avoid excessive updates. 
         this.callbackFunctionCounter += 1;
-        // The callbackFunction only processes every 10th call. This thrittling mechanism reduces how often the functino runs, improving efficienty and reducing message frequency.
+        // The callbackFunction only processes every 10th call. This throttling mechanism reduces how often the functino runs, improving efficienty and reducing message frequency.
         if (this.callbackFunctionCounter % 10 !== 0) {
             return;
         }
@@ -207,6 +209,7 @@ class GenerationTracker {
         if (this.processed_chunks.length === 0) {
             return 0;
         }
+        // return this.processed_chunks.length === 0 ? 0 : this.processed_chunks[this.processed_chunks.length - 1].end;
     }
 
     // Formats individual chunks with start and end timestamps. 
