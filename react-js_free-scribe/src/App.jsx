@@ -1,10 +1,10 @@
 import { useState, useRef, useEffect } from "react"
 import Header from "./components/Header"
-import FileDisplay from "./components/FileDisplay";
-import HomePage from "./components/Homepage";
-import Information from "./components/Information";
-import Transcribing from "./components/Transcribing";
-import { MessageTypes } from "./utils/presets";
+import FileDisplay from "./components/FileDisplay"
+import HomePage from "./components/Homepage"
+import Information from "./components/Information"
+import Transcribing from "./components/Transcribing"
+import { MessageTypes } from "./utils/presets"
 
 function App() {
     // useState variables
@@ -28,13 +28,13 @@ function App() {
         setAudioStream(null);
     }
 
-    // Since the audioStream is not updated when start and stop recording are executed in the HomePage, and the FileDisplayed is not rendered (since the audioStream is not updated) we will use a useEffect Hook.
-    useEffect(() => {
-        console.log(audioStream);
-    }, [audioStream])
+    // // Since the audioStream is not updated when start and stop recording are executed in the HomePage, and the FileDisplayed is not rendered (since the audioStream is not updated) we will use a useEffect Hook.
+    // useEffect(() => {
+    //     console.log(audioStream);
+    // }, [audioStream])
 
     // Creating a worker reference. We will let the ML code for the transcription to work in the background.
-    const worker = useRef(null);
+    const worker = useRef(null)
 
     // This code sets up a Web Worker to handle background tasks for transcription without blocking the main UI
     // The useEffect hook is used to run code after the component renders.
@@ -54,23 +54,23 @@ function App() {
             switch (e.data.type) {
                 // Indicating a downloading has started.
                 case 'DOWNLOADING':
-                    setDownloading(true);
-                    console.log('DOWNLOADING');
+                    setDownloading(true)
+                    console.log('DOWNLOADING')
                     break;
                 // Indicates that the app is loading some resources.
                 case 'LOADING':
-                    setLoading(true);
-                    console.log('LOADING');
+                    setLoading(true)
+                    console.log('LOADING')
                     break;
                 // Updating the app with the transcription results received from the worker by setting setOutput(e.data.results).
                 case 'RESULT':
-                    setOutput(e.data.results);
-                    console.log(e.data.results);
+                    setOutput(e.data.results)
+                    console.log(e.data.results)
                     break;
                 // Signals that the transription or processing is finished. 
                 case 'INFERENCE_DONE':
-                    setFinished(true);
-                    console.log('INFERENCE_DONE');
+                    setFinished(true)
+                    console.log("DONE")
                     break;
             }
         }
@@ -80,7 +80,7 @@ function App() {
 
         // Cleanup function
         return () => worker.current.removeEventListener('message', onMessageReceived)
-    }, []);
+    });
 
     // Function to get the audio buffer from the file or the transcription. 
     // This function reads audio from a file, decodes it, and returns the audio data in a specific format.
@@ -92,11 +92,11 @@ function App() {
         // The file.arrayBuffer() method reads the file  data as an ArrayBuffer. This buffer is a low-level representation of binary data, which is easier to process and decode. 
         const response = await file.arrayBuffer();
         // audioCTX.decodeAudioData(response) decodes the buffer data into audio samples that the AudioContext can work with, converting it to a formati usable by the Web Audio API.
-        const decoded = await audioCTX.decodeAudioData(response);
+        const decoded = await audioCTX.decodeAudioData(response)
         // The getChannelData(0) method extracts the audio data for a single channels (in this case the first channel or the left channel if it is stereo.)
         // getChannelData returns the audio data as a Float32Array, which is an array of 32-bit floating-point values representing audio sample amplitudes over time.
-        const audio = decoded.getChannelData(0);
-        return audio;
+        const audio = decoded.getChannelData(0)
+        return audio
     }
 
     // This function initiates the transcription process by reading audio data from an uploaded file or a live audio stream, then sends it to a Web Worker for processing. 
@@ -108,10 +108,7 @@ function App() {
         // The readAudioFrom function (from your previous code) is called with either the file or audioStream, whichever is available.
         let audio = await readAudioFrom(file ? file : audioStream);
         // This specifies the model name, openai/whisper-tiny.en, which could be a version of OpenAI's Whisper model fine-tuned for English transcription.
-        const model_name = `openai/whisper-tiny.en`;
-
-
-        console.log('starting worker');
+        const model_name = `openai/whisper-tiny.en`
 
         // Sends a message to the Web Worker, asking it to start processing. 
         worker.current.postMessage({
@@ -121,7 +118,7 @@ function App() {
             audio,
             // The model name, instructing the worker on which transcription model to use.
             model_name
-        });
+        })
     }
 
     return (
