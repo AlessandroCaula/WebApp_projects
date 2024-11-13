@@ -1,4 +1,3 @@
-// This file will contains all the languages.
 export const MessageTypes = {
     DOWNLOADING: "DOWNLOADING",
     LOADING: "LOADING",

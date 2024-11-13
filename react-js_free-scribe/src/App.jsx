@@ -63,8 +63,9 @@ function App() {
                     console.log('LOADING');
                     break;
                 // Updating the app with the transcription results received from the worker by setting setOutput(e.data.results).
-                case 'RESULT':
+                case 'RESULT':                    
                     setOutput(e.data.results);
+                    console.log(e.data.results);
                     break;
                 // Signals that the transription or processing is finished. 
                 case 'INFERENCE_DONE':
@@ -85,8 +86,7 @@ function App() {
     // This function reads audio from a file, decodes it, and returns the audio data in a specific format.
     // This method, takes a file, reads it as an audio array, decodes it, and returns the audio data in a format that can be easily processed.
     async function readAudioFrom(file) {
-        // The sampling rate is 1600 Hz, which is quite low (usually audio is sampled at 44100 Hz or higher, for higher quality). This low sample rate could be used to reduce file size.
-        const sampling_rate = 3000; // 1600;
+        const sampling_rate = 16000; // 1600;
         // An AudioContext is created with this sampling, rate, allowing for audio processing. AudioContext is a part of the Web Audio API used for creating and managing audio content. 
         const audioCTX = new AudioContext({ sampleRate: sampling_rate });
         // The file.arrayBuffer() method reads the file  data as an ArrayBuffer. This buffer is a low-level representation of binary data, which is easier to process and decode. 
