@@ -2,7 +2,9 @@ import React, { useState } from 'react'
 import Transcription from './Transcription';
 import Translation from './translation';
 
-export default function Information() {
+export default function Information(props) {
+  // Deconstructure the props
+  const { output } = props;
   // Define a State
   const [tab, setTab] = useState('transcription');
 
@@ -13,14 +15,15 @@ export default function Information() {
       {/*Add the two button for the transcription and translation*/}
       <div className='grid grid-cols-2 mx-auto bg-white shadow rounded-full overflow-hidden items-center'>
         {/*Conditionally add some style to the button*/}
-        <button onClick={() => setTab('transcription')} className={'px-4 duration-200 py-1 font-medium' + (tab === 'transcription' ? ' bg-blue-400 text-white' : ' text-blue-400 hover:text-blue-600')}>Transcription</button>
-        <button onClick={() => setTab('translation')} className={'px-4 duration-200 py-1 font-medium' + (tab === 'translation' ? ' bg-blue-400 text-white' : ' text-blue-400 hover:text-blue-600')}>Translation</button>
+        <button onClick={() => setTab('transcription')} className={'px-4 duration-200 py-1' + (tab === 'transcription' ? ' bg-blue-300 text-white' : ' text-blue-400 hover:text-blue-600')}>Transcription</button>
+        <button onClick={() => setTab('translation')} className={'px-4 duration-200 py-1' + (tab === 'translation' ? ' bg-blue-300 text-white' : ' text-blue-400 hover:text-blue-600')}>Translation</button>
       </div>
       {/*Conditionally render the transcription or translation component*/}
       {tab === 'transcription' ? (
-        <Transcription />
+        // Spreading the props and passing them down to the Transcription component.
+        <Transcription {...props} />
       ) : (
-        <Translation />
+        <Translation {...props} />
       )}
     </main>
   )

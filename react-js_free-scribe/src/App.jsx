@@ -63,7 +63,7 @@ function App() {
                     console.log('LOADING');
                     break;
                 // Updating the app with the transcription results received from the worker by setting setOutput(e.data.results).
-                case 'RESULT':                    
+                case 'RESULT':
                     setOutput(e.data.results);
                     console.log(e.data.results);
                     break;
@@ -110,6 +110,9 @@ function App() {
         // This specifies the model name, openai/whisper-tiny.en, which could be a version of OpenAI's Whisper model fine-tuned for English transcription.
         const model_name = `openai/whisper-tiny.en`;
 
+
+        console.log('starting worker');
+
         // Sends a message to the Web Worker, asking it to start processing. 
         worker.current.postMessage({
             // The type of message sent, which likely tells the worker to start an inference (transcription) task.
@@ -132,7 +135,7 @@ function App() {
                 {/*If it does not exist we are going to check if loading exist. If it exists, we are going to render out Transcribing.*/}
                 {/*If also the Transcribing does not exist, we are going to finally renering the FileDisplay or the HomePage.*/}
                 {output ? (
-                    <Information />
+                    <Information output={output} />
                 ) : loading ? (
                     <Transcribing />
                 ) : isAudioAvailable ? (
