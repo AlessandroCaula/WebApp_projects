@@ -11,6 +11,9 @@ export default function Information(props) {
   // Trancription and the Translation we don't want to recreate the translation as we are recreating the component. 
   const [translation, setTranslation] = useState(null);
   const [translating, setTranslating] = useState(null);
+  // State variable that stores the language to which we want to translate the text.
+  const [toLanguage, setToLanguage] = useState('Select language');
+
 
   // Create functions for the Copy and Downlaod actions. 
   function handleCopy() {
@@ -34,9 +37,14 @@ export default function Information(props) {
     element.click();
   }
 
+  // Method passed through the translation component that calls it back when the translate button is clicked.
   function generateTranslation() {
-    
+    console.log('language');
+    console.log(toLanguage);
   }
+
+  // variable that stores whether the tab is on transcribing or translating. 
+  const textElement = tab === 'transcription' ? output.map(val => val.text) : null;
 
   return (
     <main className="flex-1 p-4 flex flex-col gap-3 sm:gap-4 justify-center text-center pb-20 max-w-prose w-full mx-auto">
@@ -53,9 +61,9 @@ export default function Information(props) {
         {/*Conditionally render the transcription or translation component*/}
         {tab === 'transcription' ? (
           // Spreading the props and passing them down to the Transcription component.
-          <Transcription {...props} />
+          <Transcription {...props} textElement={textElement} />
         ) : (
-          <Translation {...props} />
+          <Translation {...props} textElement={textElement} toLanguage={toLanguage} translating={translating} setToLanguage={setToLanguage} generateTranslation={generateTranslation} />
         )}
       </div>
 

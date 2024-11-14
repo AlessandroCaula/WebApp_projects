@@ -1,12 +1,10 @@
 import React from 'react'
 
 export default function Transcription(props) {
-  // Deconstructuring the props. The output. And show and render it.
-  const { output } = props;
-
-  const finalText = output.map(val => val.text);
+  // Deconstructuring the props. The textElement in this case. And show and render it.
+  const { textElement } = props;
 
   return (
-    <div>{finalText}</div>
+    <div>{textElement}</div>
   )
 }
