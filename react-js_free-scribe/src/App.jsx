@@ -106,7 +106,7 @@ function App() {
         if (!file && !audioStream) { return }
 
         // The readAudioFrom function (from your previous code) is called with either the file or audioStream, whichever is available.
-        let audio = await readAudioFrom(file ? file : audioStream);
+        let audio = await readAudioFrom(file ? file : audioStream)
         // This specifies the model name, openai/whisper-tiny.en, which could be a version of OpenAI's Whisper model fine-tuned for English transcription.
         const model_name = `openai/whisper-tiny.en`
 
@@ -137,7 +137,7 @@ function App() {
                     <Transcribing />
                 ) : isAudioAvailable ? (
                     // Passing down the file or the audioStream file as well as the handleAudioReset function.
-                    <FileDisplay handleFormSubmission={handleFormSubmission} file={file} audioStream={audioStream} handleAudioReset={handleAudioReset} />
+                    <FileDisplay handleFormSubmission={handleFormSubmission} handleAudioReset={handleAudioReset} file={file} audioStream={audioStream} />
                 ) : (
                     // We are gonna pass the setFile and setAudioStream State variables down the Homepage component as a props.
                     <HomePage setFile={setFile} setAudioStream={setAudioStream} />

@@ -180,10 +180,12 @@ class GenerationTracker {
         createPartialResultMessage(result)
     }
     
-    // Processes chunks of audio data and sends timestamped results.
+    // Processes chunks of audio data and sends timestamped results back to the main thread.
     chunkCallback(data) {
+        // 1) Data Storage. The incoming data chunk (a piece of the audio) is added to the chunks array for cumulative processing. 
         this.chunks.push(data)
-        this.chunks.push(data)
+        // 2) ASR Decoding. This part uses the Whisper ASR (Automatic Speech Recognition) model's tokenizer to decode audio data. 
+        // This step translates the raw audio chunks into text and generates a list of chunks, where each chunk includes transcription text and timestamp information. 
         const [text, { chunks }] = this.pipeline.tokenizer._decode_asr(
             this.chunks,
             {

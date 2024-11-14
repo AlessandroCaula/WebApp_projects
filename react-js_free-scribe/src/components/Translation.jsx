@@ -1,7 +1,13 @@
 import React from 'react'
 
-export default function Translation() {
+// Component that is rendered when the Translation button is clicked. 
+export default function Translation(props) {
+  // Deconstruct the props. 
+  const { translation } = props;
+
   return (
-    <div>Translation</div>
+    <div>
+
+    </div>
   )
 }
