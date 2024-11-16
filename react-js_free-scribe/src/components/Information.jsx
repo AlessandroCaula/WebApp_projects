@@ -107,10 +107,10 @@ export default function Information(props) {
             <h1 className='font-semibold text-4xl sm:text-5xl md:text-6xl whitespace-nowrap'>Your <span className='text-blue-400 bold'>Transcription</span></h1>
 
             {/*Add the two button for the transcription and translation*/}
-            <div className='grid grid-cols-2 mx-auto bg-white shadow rounded-full overflow-hidden items-center'>
+            <div className='grid grid-cols-2 sm:mx-auto bg-white  rounded overflow-hidden items-center p-1 blueShadow border-[2px] border-solid border-blue-300'>
                 {/*Conditionally add some style to the button*/}
-                <button onClick={() => setTab('transcription')} className={'px-4 duration-200 py-1' + (tab === 'transcription' ? ' bg-blue-300 text-white' : ' text-blue-400 hover:text-blue-600')}>Transcription</button>
-                <button onClick={() => setTab('translation')} className={'px-4 duration-200 py-1' + (tab === 'translation' ? ' bg-blue-300 text-white' : ' text-blue-400 hover:text-blue-600')}>Translation</button>
+                <button onClick={() => setTab('transcription')} className={'px-4 rounded duration-200 py-1 ' + (tab === 'transcription' ? ' bg-blue-300 text-white' : ' text-blue-400 hover:text-blue-600')}>Transcription</button>
+                <button onClick={() => setTab('translation')} className={'px-4 rounded duration-200 py-1  ' + (tab === 'translation' ? ' bg-blue-300 text-white' : ' text-blue-400 hover:text-blue-600')}>Translation</button>
             </div>
 
             <div className='my-8 flex flex-col'>
