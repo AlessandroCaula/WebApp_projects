@@ -39,8 +39,22 @@ export default function Information(props) {
 
   // Method passed through the translation component that calls it back when the translate button is clicked.
   function generateTranslation() {
-    console.log('language');
-    console.log(toLanguage);
+    // If it is translating, or there is no language selected. Just return from the function. 
+    if (translating || toLanguage === 'Select language') {
+      return;
+    }
+
+    // Set translating to true.
+    setTranslating(true);
+
+    // Otherwise generate the translation. 
+    Worker.current.postMessage({
+      text: output.map(val => val.text),
+      // Original language.
+      source_Language: 'eng_Latn',
+      // Target language
+      tgt_lang: toLanguage
+    })
   }
 
   // variable that stores whether the tab is on transcribing or translating. 
