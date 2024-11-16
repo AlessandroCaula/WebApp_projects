@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import Transcription from './Transcription'
-import Translation from './translation'
+import Translation from './Translation'
 
 export default function Information(props) {
     // Deconstructure the props
