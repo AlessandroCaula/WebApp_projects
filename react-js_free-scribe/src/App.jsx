@@ -77,7 +77,6 @@ function App() {
         // addEventListener allows the main app to listen for messages from the worker. 
         // This is the message event. 
         worker.current.addEventListener('message', onMessageReceived)
-
         // Cleanup function
         return () => worker.current.removeEventListener('message', onMessageReceived)
     });
@@ -132,7 +131,7 @@ function App() {
                 {/*If it does not exist we are going to check if loading exist. If it exists, we are going to render out Transcribing.*/}
                 {/*If also the Transcribing does not exist, we are going to finally renering the FileDisplay or the HomePage.*/}
                 {output ? (
-                    <Information output={output} />
+                    <Information output={output} finished={finished}/>
                 ) : loading ? (
                     <Transcribing />
                 ) : isAudioAvailable ? (

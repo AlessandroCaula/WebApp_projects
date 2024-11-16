@@ -2,6 +2,8 @@
 // pipeline: Is a function from the @xenova/transformers library that initializes a specific pipeline (like tranlsation, summarization, etc.) using a pre-trained machine learning model.
 import { pipeline } from '@xenova/transformers'
 
+env.allowLocalModels = false;
+
 // GET INSTANCE METHOD
 // This class manages the translation pipeline to avoid repeatedly loading the model, saving time and resources. 
 class MyTranslationPipeline {
@@ -10,7 +12,7 @@ class MyTranslationPipeline {
     // model: Points to the Xenova/nllb-200-distilled-600M translation model.
     static model = 'Xenova/nllb-200-distilled-600M';
     // Stores the initialized pipeline instance for reuse.
-    static instance = null
+    static instance = null;
 
     // Creates or retireves a singleton instance of the pipeline. 
     static async getInstance(progress_callback = null) {
@@ -19,10 +21,10 @@ class MyTranslationPipeline {
             // Calls the pipeline function to initialize the translation pipeline with:
             // - The specified task (translation).
             // - Optional progress_callback to report loading progress.
-            this.instance = await pipeline(this.task, null, { progress_callback })
+            this.instance = pipeline(this.task, this.model, { progress_callback });
         }
         // Stores the created instance in this.instance for reuse.
-        return this.instance
+        return this.instance;
     }
 }
 
@@ -32,8 +34,9 @@ self.addEventListener('message', async (event) => {
     // Uses getInstance to initialize (or retrieve) the translation pipeline.
     // The progress_callback (x => self.postMessage(x)) sends model-loading progress updates back to the main thread via self.postMessage.
     let translator = await MyTranslationPipeline.getInstance(x => {
-        self.postMessage(x);
+        self.postMessage(x)
     })
+    console.log(event.data)
 
     // TRANSLATION EXECUTION
     // Performs the actual tranlation. 
@@ -50,9 +53,7 @@ self.addEventListener('message', async (event) => {
             self.postMessage({
                 status: 'update',
                 // Intermediate translation: skip_special_tokens ensures unnecessary tokens (like control markers) are excluded.
-                output: translator.tokenizer.decode(x, [0].output_token_ids, {
-                    skip_special_tokens: true
-                })
+                output: translator.tokenizer.decode(x[0].output_token_ids, { skip_special_tokens: true })
             })
         }
     })
