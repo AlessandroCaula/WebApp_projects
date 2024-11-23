@@ -11,18 +11,21 @@ const Hero = () => {
       id='home'
       className="w-full flex xl:flex-row flex-col justify-center min-h-screen gap-10 max-container"
     >
+      {/* Left side of the section, the one containing the writtens */}
+
       {/* relative: is used to position an element according to the normal flow of the document. Any offset are calculated relative to the element's normal position and the element will act as a position reference for absolutely positioned children */}
       {/* On extra-large screen the div is going to occupy the 2/5 of the screen */}
       <div className="relative xl:w-2/5 flex flex-col justify-center items-start w-full max-xl:padding-x pt-28">
         <p className="text-xl font-montserrat text-coral-red">Our Winter Colelction</p>
         {/* On Small devices the text will be 72 pixels. Sets the font size to 72px only on screens with a width of 640px or smaller 
         leading-82px => line height*/}
-        <h1 className="mt-10 font-palanquin text-8xl max-sm:text-[72px] max-sm:leading-82px">
-          <span>The new Arrival</span>
+        <h1 className="mt-10 font-palanquin text-8xl max-sm:text-[72px] max-sm:leading-[82px] font-bold">
+          {/* z-10 => It will appear above the background */}
+          <span className="xl:bg-white xl:whitespace-nowrap relative z-10 pr-10">The new Arrival</span>
           <br/>
-          <span>Nike</span>Shoes
+          <span className="text-coral-red inline-block mt-3">Nike</span> Shoes
         </h1>
-        <p>Discover stylish Nike arrivals, quality comfort, and innovation for your active life.</p>
+        <p className="font-montserrat text-slate-gray text-lg leading-8 mt-6 mb-14 sm:max-w-sm">Discover stylish Nike arrivals, quality comfort, and innovation for your active life.</p>
         {/* This button is going to have two different props */}
         <Button label="Shop now" iconURL={arrowRight} />
 
@@ -38,13 +41,14 @@ const Hero = () => {
           {/* Returning a div for each statistic */}
           {statistics.map((stat) => (
             <div key={stat.label}>
-              <p>{stat.value}</p>
-              <p>{stat.label}</p>
+              <p className="text-4xl font-palanquin font-bold">{stat.value}</p>
+              <p className="leading-7 font-montserrat text-slate-gray">{stat.label}</p>
             </div>
           ))}
         </div>
       </div>
-
+      
+      {/* Right side part of the section, the one containing the shoe image */}
 
     </section>
   )
