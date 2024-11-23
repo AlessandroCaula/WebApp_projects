@@ -22,14 +22,18 @@
 
 import { headerLogo } from '../assets/images';
 import { hamburger } from '../assets/icons';
+import { navLinks } from '../constants';
 
 const Nav = () => {
   return (
-    // Header semantinc HTML element
-    <header className='padding-x py-8 absolute '>
+    // Header semantinc HTML element. Use the 'absolute' utility to position an element outside of the normal flow of the document, causing neighboring elements to act as if the element doesn't exist.
+    // All this classes are going to make it appear on top of the other elements.  
+    <header className='padding-x py-8 absolute z-10 w-full'>
       {/* Navigation semantic HTML element */}
-      <nav>
-        {/* The <a> element is used to define hyperlinks, which are fundamental way to navigate between web pages or sections within a page, as well as to link to external resources. 
+      {/* max-container is an additional style that we have added in the index.css */}
+      {/* It is a flex container */}
+      <nav className='flex justify-between items-center max-container'>
+        {/* The <a> (anchor tag) element is used to define hyperlinks, which are fundamental way to navigate between web pages or sections within a page, as well as to link to external resources. 
         <a href="URL" target="_target">Link Text</a> */}
         <a href="/">
           <img
@@ -39,6 +43,31 @@ const Nav = () => {
             height={29}
           />
         </a>
+        {/* Creating the link near the nike logo. Just with an unordered list. With max-lg:hidden means that it is only going to visible on desktop devices */}
+        {/* max-lg:hidden => hides the element only when the screen width is less than or equal to the lg brackpoint (1024px in this case) */}
+        <ul className='flex-1 flex justify-center items-center gap-16 max-lg:hidden'>
+          {/* Mapping through the navLinks and put them as items in the unordered list */}
+          {/* When you use => () it is an immediate returns, rather then when using => {} */}
+          {navLinks.map((item) => (
+            <li key={item.label}>
+              <a
+                href={item.href}
+                className='font-montserrat leading-normal text-lg text-slate-gray'
+              >
+                {item.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+        {/* The haburger is only going to be visible on mobile, small screens. Usually is hidden but on max-lg is going to be block (so visible)*/}
+        <div className='hidden max-lg:block'>
+          <img
+            src={hamburger}
+            alt='Hamburger'
+            width={25}
+            height={25}
+          />  
+        </div>
       </nav>
     </header>
   )
