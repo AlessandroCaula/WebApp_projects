@@ -11,22 +11,22 @@ const App = () => (
       <Hero />  {/**This is going to be the Hero component */}
     </section>
     {/**Also the padding class has been defined in the index.css */}
-    <section className="padding border-3 border border-black">
+    <section className="padding border border-black">
       <PopularProducts />
     </section>
-    <section className="padding border-3 border border-black">
+    <section className="padding border border-black">
       <SuperQuality />
     </section>
-    <section className="padding-x py-10 border-3 border border-black">
+    <section className="padding-x py-10 border border-black">
       <Services />
     </section>
-    <section className="padding border-3 border border-black">
+    <section className="padding border border-black">
       <SpecialOffer />
     </section>
-    <section className=" bg-pale-blue padding border-3 border border-black">
+    <section className=" bg-pale-blue padding border border-black">
       <CustomerReviews />
     </section>
-    <section className="padding-x sm:py-32 py-16 w-full border-3 border border-black">
+    <section className="padding-x sm:py-32 py-16 w-full border border-black">
       <Subscribe />
     </section>
     <section className="bg-black padding-x padding-t pb-8">
