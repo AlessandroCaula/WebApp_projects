@@ -7,7 +7,7 @@ const App = () => (
   <main className="relative">
     <Nav />
     {/**Padding-r and padding-b have been defined in the index.css */}
-    <section className="xl:padding-1 wide:padding-r padding-b">
+    <section className="xl:padding-l wide:padding-r padding-b">
       <Hero />  {/**This is going to be the Hero component */}
     </section>
     {/**Also the padding class has been defined in the index.css */}

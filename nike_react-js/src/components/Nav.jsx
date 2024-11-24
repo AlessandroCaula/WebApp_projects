@@ -39,8 +39,9 @@ const Nav = () => {
           <img
             src={headerLogo}
             alt='Logo'
-            width={130}
+            width={129}
             height={29}
+            className='m-0 w-[129px] h-[29px]'
           />
         </a>
         {/* Creating the link near the nike logo. Just with an unordered list. With max-lg:hidden means that it is only going to visible on desktop devices */}

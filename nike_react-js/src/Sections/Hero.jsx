@@ -23,7 +23,7 @@ const Hero = () => {
 
       {/* relative: is used to position an element according to the normal flow of the document. Any offset are calculated relative to the element's normal position and the element will act as a position reference for absolutely positioned children */}
       {/* On extra-large screen the div is going to occupy the 2/5 of the screen */}
-      <div className="relative xl:w-2/5 flex flex-col justify-center items-start w-full max-xl:padding-x pt-28">
+      <div className='relative xl:w-2/5 flex flex-col justify-center items-start w-full max-xl:padding-x pt-28'>
         <p className="text-xl font-montserrat text-coral-red">
           Our Winter Colelction
         </p>
@@ -81,8 +81,8 @@ const Hero = () => {
               <ShoeCard
                 index={index}
                 imgURL={image}
-                changeBigShoeImage={() => { }}
-                bigShoeImg=""
+                changeBigShoeImage={(shoe) => setBigShoeImg(shoe)}
+                bigShoeImg={bigShoeImg}
               />
             </div>
           ))}
