@@ -28,7 +28,7 @@ const Nav = () => {
   return (
     // Header semantinc HTML element. Use the 'absolute' utility to position an element outside of the normal flow of the document, causing neighboring elements to act as if the element doesn't exist.
     // All this classes are going to make it appear on top of the other elements.  
-    <header className='padding-x py-8 absolute z-10 w-full border'>
+    <header className='padding-x py-8 absolute z-10 w-full border border-red-500'>
       {/* Navigation semantic HTML element */}
       {/* max-container is an additional style that we have added in the index.css */}
       {/* It is a flex container */}

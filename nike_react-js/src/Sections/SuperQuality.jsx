@@ -7,7 +7,7 @@ const SuperQuality = () => {
     // items-center => Center vertically
     // max-lg:flex-col => On devices smaller than the 1024 it will have a column arrangment
     // max-container => is going to ensure that everything is contained within full width.
-    <section id="about-us" className="flex justify-between items-center max-lg:flex-col gap-10 w-full max-container border">
+    <section id="about-us" className="flex justify-between items-center max-lg:flex-col gap-10 w-full max-container border border-yellow-500">
       {/* div to wrap the text and the bottom on the left */}
       <div className="flex flex-1 flex-col border">
         {/* On Small devices the text will be 72 pixels. Sets the font size to 72px only on screens with a width of 640px or smaller 

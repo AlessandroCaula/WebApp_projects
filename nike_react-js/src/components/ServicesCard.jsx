@@ -1,6 +1,6 @@
 const ServicesCard = () => {
   return (
-    <div>ServicesCard</div>
+    <div className="border">ServicesCard</div>
   )
 }
 

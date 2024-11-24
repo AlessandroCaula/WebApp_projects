@@ -17,7 +17,7 @@ const Hero = () => {
     // xl:flex-row => it applies the CSS property flex-direction: row; when the size matches the xl breakpoint or larger. It means the flex container's childred will be arranged in an horizontal woe instead of a vertical column for thos screen sizes. 
     <section
       id='home'
-      className="w-full flex xl:flex-row flex-col justify-center min-h-screen gap-10 max-container border"
+      className="w-full flex xl:flex-row flex-col justify-center min-h-screen gap-10 max-container border border-green-600"
     >
       {/* Left side of the section, the one containing the writtens */}
 
