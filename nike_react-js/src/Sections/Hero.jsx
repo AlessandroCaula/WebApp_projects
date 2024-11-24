@@ -17,25 +17,25 @@ const Hero = () => {
     // xl:flex-row => it applies the CSS property flex-direction: row; when the size matches the xl breakpoint or larger. It means the flex container's childred will be arranged in an horizontal woe instead of a vertical column for thos screen sizes. 
     <section
       id='home'
-      className="w-full flex xl:flex-row flex-col justify-center min-h-screen gap-10 max-container"
+      className="w-full flex xl:flex-row flex-col justify-center min-h-screen gap-10 max-container border"
     >
       {/* Left side of the section, the one containing the writtens */}
 
       {/* relative: is used to position an element according to the normal flow of the document. Any offset are calculated relative to the element's normal position and the element will act as a position reference for absolutely positioned children */}
       {/* On extra-large screen the div is going to occupy the 2/5 of the screen */}
-      <div className='relative xl:w-2/5 flex flex-col justify-center items-start w-full max-xl:padding-x pt-28'>
-        <p className="text-xl font-montserrat text-coral-red">
+      <div className='relative xl:w-2/5 flex flex-col justify-center items-start w-full max-xl:padding-x pt-28 border'>
+        <p className="text-xl font-montserrat text-coral-red border">
           Our Winter Colelction
         </p>
         {/* On Small devices the text will be 72 pixels. Sets the font size to 72px only on screens with a width of 640px or smaller 
         leading-82px => line height*/}
-        <h1 className="mt-10 font-palanquin text-8xl max-sm:text-[72px] max-sm:leading-[82px] font-bold">
+        <h1 className="mt-10 font-palanquin text-8xl max-sm:text-[72px] max-sm:leading-[82px] font-bold border">
           {/* z-10 => It will appear above the background */}
-          <span className="xl:bg-white xl:whitespace-nowrap relative z-10 pr-10">The new Arrival</span>
+          <span className="xl:bg-white xl:whitespace-nowrap relative z-10 pr-10 border">The new Arrival</span>
           <br />
-          <span className="text-coral-red inline-block mt-3">Nike</span> Shoes
+          <span className="text-coral-red inline-block mt-3 border">Nike</span> Shoes
         </h1>
-        <p className="font-montserrat text-slate-gray text-lg leading-8 mt-6 mb-14 sm:max-w-sm">
+        <p className="font-montserrat text-slate-gray text-lg leading-8 mt-6 mb-14 sm:max-w-sm border">
           Discover stylish Nike arrivals, quality comfort, and innovation for your active life.
         </p>
 
@@ -50,7 +50,7 @@ const Hero = () => {
             w-full => They take 100% of the screen
             mt-20 => Margin top of 5rem (80px)
         */}
-        <div className="flex justify-start items-start flex-wrap w-full mt-20 gap-16">
+        <div className="flex justify-start items-start flex-wrap w-full mt-20 gap-16 border">
           {/* Returning a div for each statistic */}
           {statistics.map((stat) => (
             <div key={stat.label}>

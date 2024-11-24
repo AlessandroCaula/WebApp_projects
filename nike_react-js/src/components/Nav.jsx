@@ -28,11 +28,11 @@ const Nav = () => {
   return (
     // Header semantinc HTML element. Use the 'absolute' utility to position an element outside of the normal flow of the document, causing neighboring elements to act as if the element doesn't exist.
     // All this classes are going to make it appear on top of the other elements.  
-    <header className='padding-x py-8 absolute z-10 w-full'>
+    <header className='padding-x py-8 absolute z-10 w-full border'>
       {/* Navigation semantic HTML element */}
       {/* max-container is an additional style that we have added in the index.css */}
       {/* It is a flex container */}
-      <nav className='flex justify-between items-center max-container'>
+      <nav className='flex justify-between items-center max-container border'>
         {/* The <a> (anchor tag) element is used to define hyperlinks, which are fundamental way to navigate between web pages or sections within a page, as well as to link to external resources. 
         <a href="URL" target="_target">Link Text</a> */}
         <a href="/">
@@ -46,14 +46,14 @@ const Nav = () => {
         </a>
         {/* Creating the link near the nike logo. Just with an unordered list. With max-lg:hidden means that it is only going to visible on desktop devices */}
         {/* max-lg:hidden => hides the element only when the screen width is less than or equal to the lg brackpoint (1024px in this case) */}
-        <ul className='flex-1 flex justify-center items-center gap-16 max-lg:hidden'>
+        <ul className='flex-1 flex justify-center items-center gap-16 max-lg:hidden border'>
           {/* Mapping through the navLinks and put them as items in the unordered list */}
           {/* When you use => () it is an immediate returns, rather then when using => {} */}
           {navLinks.map((item) => (
             <li key={item.label}>
               <a
                 href={item.href}
-                className='font-montserrat leading-normal text-lg text-slate-gray'
+                className='font-montserrat leading-normal text-lg text-slate-gray border'
               >
                 {item.label}
               </a>
@@ -61,7 +61,7 @@ const Nav = () => {
           ))}
         </ul>
         {/* The haburger is only going to be visible on mobile, small screens. Usually is hidden but on max-lg is going to be block (so visible)*/}
-        <div className='hidden max-lg:block'>
+        <div className='hidden max-lg:block border'>
           <img
             src={hamburger}
             alt='Hamburger'
