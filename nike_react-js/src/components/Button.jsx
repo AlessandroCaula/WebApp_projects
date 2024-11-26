@@ -3,7 +3,12 @@ const Button = ({ label, iconURL, backgroundColor, borderColor, textColor }) => 
   return (
     // justify-center => center them horizonatlly 
     // items-center => center them vertically
-    <button className={"flex justify-center items-center gap-2 px-7 py-4 border font-montserrat text-lg leading-none bg-coral-red rounded-full text-white border-coral-red"}>
+    // Conditionally color the the button border, background and text colors of the button
+    <button className={`flex justify-center items-center gap-2 px-7 py-4 border font-montserrat text-lg leading-none rounded-full  
+      ${backgroundColor ? backgroundColor : ` bg-coral-red `} 
+      ${textColor ? textColor : ` text-white `}
+      ${borderColor ? borderColor : ` border-coral-red`}`}
+    >
       {label}
       {/* Render the icon image only if there is */}
       {iconURL && <img
