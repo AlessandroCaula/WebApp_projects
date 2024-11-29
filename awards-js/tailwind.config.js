@@ -14,8 +14,29 @@ export default {
         'circular-web': ['circular-web', 'sanf-serif'],
         'robert-medium': ['robert-medium', 'sanf-serif'],
         'robert-regular': ['robert-regular', 'sanf-serif']
+      },
+      // Extend the colors used in the out project.
+      colors: {
+        // Create different shades of blue.
+        blue: {
+          // Color code are picked from the color picker.
+          50: '#dfdff0',
+          75: '#dfdff2',
+          100: '#f0f2fa',
+          200: '#010101',
+          300: '#4fb7dd',
+        },
+        // Create a variation of violet.
+        violet: {
+          300: '#5724ff',
+        },
+        // Variation of yellow
+        yellow: {
+          100: '#8e983f',
+          300: '#edff66',
+        }
       }
     },
-  },
+  },  
   plugins: [],
 }
