@@ -5,8 +5,9 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    // Extending our themes by adding the font family imported. 
+    // Extending our themes 
     extend: {
+      // Adding the font families imported. 
       fontFamily: {
         zentry: ['zentry', 'sanf-serif'],
         general: ['general', 'sanf-serif'],
