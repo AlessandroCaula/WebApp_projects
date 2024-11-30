@@ -1,2 +1,2 @@
 # JavaScript_projects
- Repository containing different projects built to learn JS, CSS, HTML, React JS and other frameworks for Full Stack Development
+ Repository containing different projects with JavaScripr, CSS, HTML, ReactJS, TailwindCSS and other frameworks for Full Stack Development
