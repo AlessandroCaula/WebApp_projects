@@ -7,7 +7,7 @@ const Hero = () => {
   // Setting the isLoading state to true as initial state, caus usually a video takes some time to load.
   const [isLoading, setIsLoading] = useState(true);
   // Define another useState for the number of video that has loaded.
-  const [loadedCount, setLoadedCount] = useState(0);
+  const [loadedVideos, setLoadedVideos] = useState(0);
   
   // Define the number of total video which you want to play (in this case we are set it to 4)
   const totalVideo = 4;
@@ -17,6 +17,11 @@ const Hero = () => {
   // useRef is a React hook used to create a mutable reference object that persists across renders. It provides access to a .current property where you can store a value that doesn't trigger a re-render when it changes.
   // We are going to use it to target the <div> within which we want to play the videos.
   const nextVideoRef = useRef(null);
+
+  // Define the function for handle the loadedData.
+  const handleVideoLoaded = () => {
+    setLoadedVideos((prevLoadedVideo) => prevLoadedVideo + 1);
+  }
 
   // Define some new functions that will handle the mini video player. This video player will show different videos when clicking in the middle of the screen.
   const handleMiniVideoClick = () => {
@@ -40,10 +45,17 @@ const Hero = () => {
           {/* mask-clip-path => our special css class name */}
           <div className="mask-clip-path absolute-center absolute z-50 size-64 cursor-pointer overflow-hidden rounded-lg">
             {/* Creating another div, which will actually be a mini video player. */}
-            <div onClick={handleMiniVideoClick} className="origin-center">
+            <div onClick={handleMiniVideoClick} className="origin-center scale-50 opacity-0 transition-all duration-500 ease-in hover:scale-100 hover:opacity-100">
               {/* Implement the video player as a HTML self-closing video tag */}
               <video 
                 ref={nextVideoRef}
+                src={getVideoSrc(currentIndex + 1)}
+                loop
+                muted
+                id='current-video'
+                className="size-64 origin-center scale-150 object-cover object-center"
+                // onLoadedData => is a special function that is called when the data is loaded.
+                onLoadedData={handleVideoLoaded} 
               />
             </div>
           </div>
