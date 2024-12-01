@@ -17,7 +17,7 @@ body {
   /* Define the font-face with the family called circular-web that will point (src) to the URL where it's contained. */
   @font-face {
     font-family: 'circular-web';
-    src: url('/fonts/circularweb-book.woff2') format('woff2')
+    src: url('/fonts/circular-web-book.woff2') format('woff2')
   }
 
   @font-face {
