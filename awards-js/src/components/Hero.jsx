@@ -10,7 +10,7 @@ const Hero = () => {
   const [loadedVideos, setLoadedVideos] = useState(0);
   
   // Define the number of total video which you want to play (in this case we are set it to 4)
-  const totalVideo = 4;
+  const totalVideo = 3;
   // We also have to define the reference which will allow to then switch between those videos or to target the video player within which will play the videos.
   // In react you use the useRef hook to create a reference to a DOM element.
   // The DOM (Document Object Model) is a programming interface for web documents. It represents the structure of a web page as a tree of objects, where each element (like a <div>, <p>, or <img) is a node in the tree. This structure allows programming languages, like JavaScript, to dynamically interact with and manipulate the content, structure, and styling of a webpage.
@@ -20,15 +20,28 @@ const Hero = () => {
 
   // Define the function for handle the loadedData.
   const handleVideoLoaded = () => {
+    // (prevLoadedVideo) => prevLoadedVideo + 1 => is the callback function. 
+    // The arrow function ((prevLoadedVideo) => prevLoadedVideo + 1) inside setLoadedVideo works because React's setState function provides an optional function form. This functional form takes a callback function as an argument, and React automatically passes the current state value (or "previous state") as the parameter to this function. 
+    // React automatically passes the most recent value of loadedVideos as the argument (prevLoadedVideo) to the arrow function.
     setLoadedVideos((prevLoadedVideo) => prevLoadedVideo + 1);
   }
+
+  // Since there are only 4 videos, we can only try to go up to three but then it is more than that we need to go back to 0 (the first video). This is the perfect use case for the Modulo Operator.
+  // The modulo operator (%) returns the remainder of the division of two numbers. 7 % 3 = 1 (3*2 + 1). 15 % 4 = 3 (4*3 + 3).
+  // 0 % 4 = 0 then + 1 => 1
+  // 1 % 4 = 1 then + 1 => 2
+  // 2 % 4 = 2 then + 1 => 3
+  // 3 % 4 = 3 then + 1 => 4
+  // 4 % 4 = 0 then + 1 => 1 (and then at this point we start from the beginning)
+  // In this case, the upcomingVideoIndex variable does not automatically updates itself because it is a regular constant, not tied to React's state system. It is only calculated onces when the component renders. However, when you click the mini video player, the handleMiniVideoClick function triggers a state update (setCurrentIndex), which causes the component to re-render. During this re-render, the upcomingVideoIndex is recalculated because it depends on the update value of currentIndex.
+  const upcomingVideoIndex = (currentIndex % totalVideo) + 1 ;
 
   // Define some new functions that will handle the mini video player. This video player will show different videos when clicking in the middle of the screen.
   const handleMiniVideoClick = () => {
     // When the mini-player is clicked we want to set the hasClicked state to true.
     setHasClicked(true);
-    // We also want to set the currentIndex state to be equal to a function where we get the previous index and add 1 to it.
-    setCurrentIndex((prevIndex) => prevIndex + 1);
+    // We also want to set the currentIndex equal to the upcomingVideoIndex which uses the modulo operator to avoid to go beyond the total number of videos.
+    setCurrentIndex(upcomingVideoIndex);
   }
 
   // Define the source of the videos to be played. As a function that will return the source of the videos, with the index in their name. Givin the path of each video source.
@@ -53,6 +66,7 @@ const Hero = () => {
                 loop
                 muted
                 id='current-video'
+                // scale-150 => utility class used to apply a scale transformation to an element, increasing or decreasing its size relative to its original size. It scales the element 150% of its original size.
                 className="size-64 origin-center scale-150 object-cover object-center"
                 // onLoadedData => is a special function that is called when the data is loaded.
                 onLoadedData={handleVideoLoaded} 
