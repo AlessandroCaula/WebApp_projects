@@ -8,9 +8,9 @@ const Hero = () => {
   const [isLoading, setIsLoading] = useState(true);
   // Define another useState for the number of video that has loaded.
   const [loadedVideos, setLoadedVideos] = useState(0);
-  
+
   // Define the number of total video which you want to play (in this case we are set it to 4)
-  const totalVideo = 3;
+  const totalVideos = 3;
   // We also have to define the reference which will allow to then switch between those videos or to target the video player within which will play the videos.
   // In react you use the useRef hook to create a reference to a DOM element.
   // The DOM (Document Object Model) is a programming interface for web documents. It represents the structure of a web page as a tree of objects, where each element (like a <div>, <p>, or <img) is a node in the tree. This structure allows programming languages, like JavaScript, to dynamically interact with and manipulate the content, structure, and styling of a webpage.
@@ -34,7 +34,7 @@ const Hero = () => {
   // 3 % 4 = 3 then + 1 => 4
   // 4 % 4 = 0 then + 1 => 1 (and then at this point we start from the beginning)
   // In this case, the upcomingVideoIndex variable does not automatically updates itself because it is a regular constant, not tied to React's state system. It is only calculated onces when the component renders. However, when you click the mini video player, the handleMiniVideoClick function triggers a state update (setCurrentIndex), which causes the component to re-render. During this re-render, the upcomingVideoIndex is recalculated because it depends on the update value of currentIndex.
-  const upcomingVideoIndex = (currentIndex % totalVideo) + 1 ;
+  const upcomingVideoIndex = (currentIndex % totalVideos) + 1;
 
   // Define some new functions that will handle the mini video player. This video player will show different videos when clicking in the middle of the screen.
   const handleMiniVideoClick = () => {
@@ -52,28 +52,62 @@ const Hero = () => {
     // Unlike vh, which uses a static viewport height, dvh dynamically adjusts the height based on the available space in the viewport.
     // w-screen => The width of the screen will be the 100% of the screen width
     <div className="relative h-dvh w-screen overflow-x-hidden">
-        {/* Creating a div which will contain the video of the initial screen */}
-        {/* z-10 => So that this video will appear above other content */}
-        <div id="video-frame" className="relative z-10 h-dvh w-screen overflow-hidden rounded-lg bg-blue-75">
+      {/* Creating a div which will contain the video of the initial screen */}
+      {/* z-10 => So that this video will appear above other content */}
+      <div id="video-frame" className="relative z-10 h-dvh w-screen overflow-hidden rounded-lg bg-blue-75 border border-red-600">
+        <div className="border border-blue-700">
           {/* mask-clip-path => our special css class name */}
-          <div className="mask-clip-path absolute-center absolute z-50 size-64 cursor-pointer overflow-hidden rounded-lg">
+          <div className="mask-clip-path absolute-center absolute z-50 size-64 cursor-pointer overflow-hidden rounded-lg border border-green-700">
             {/* Creating another div, which will actually be a mini video player. */}
             <div onClick={handleMiniVideoClick} className="origin-center scale-50 opacity-0 transition-all duration-500 ease-in hover:scale-100 hover:opacity-100">
               {/* Implement the video player as a HTML self-closing video tag */}
-              <video 
+              {/* This video player will have the zoom effect. */}
+              <video
                 ref={nextVideoRef}
-                src={getVideoSrc(currentIndex + 1)}
+                src={getVideoSrc(upcomingVideoIndex)}
                 loop
                 muted
                 id='current-video'
                 // scale-150 => utility class used to apply a scale transformation to an element, increasing or decreasing its size relative to its original size. It scales the element 150% of its original size.
                 className="size-64 origin-center scale-150 object-cover object-center"
                 // onLoadedData => is a special function that is called when the data is loaded.
-                onLoadedData={handleVideoLoaded} 
+                onLoadedData={handleVideoLoaded}
               />
             </div>
           </div>
+          {/* Create another video component, which will be the primary video on the background */}
+          <video
+            ref={nextVideoRef}
+            src={getVideoSrc(currentIndex)}
+            loop
+            muted
+            id="next video"
+            className="absolute-center invisible z-20 size-64 object-cover object-center"
+            onLoadedData={handleVideoLoaded}
+          />
+
+          {/* Define another video player. */}
+          <video
+            // Checking if we are at the last video, in that case re-set it equal to 1.
+            src={getVideoSrc(currentIndex === totalVideos - 1 ? 1 : currentIndex)}
+            autoPlay
+            loop
+            muted
+            className="absolute left-0 top-0 size-full object-cover object-center"
+            onLoadedData={handleVideoLoaded}
+          />
         </div>
+        <h1 className="special-font hero-heading absolute bottom-5 right-5 z-40 text-blue-75">
+          G<b>A</b>MING
+        </h1>
+        <div className="absolute left-0 top-0 z-40 size-full">
+          {/* sm:px-10 => is a responsive utility class that applies horizontal padding based on the screen size. sm => activates this rule when the screen size is small or larger, based on the sm breakpoint (default 640px width or greater) */}
+          <div className="mt-24 px-5 sm:px-10">
+            <h1 className="special-font hero-heading text-blue-100">redefi<b>n</b>e</h1>
+            <p className="mb-5 max-w-64 font-robert-regular text-blue-100">Enter the Metagame Layer <br />Unleash the Play Economy</p>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }
