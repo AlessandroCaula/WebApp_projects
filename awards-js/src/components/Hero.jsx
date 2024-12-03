@@ -1,4 +1,6 @@
 import { useRef, useState } from "react"
+import Button from "./Button";
+import { TiLocationArrow } from "react-icons/ti";
 
 const Hero = () => {
   // Define some useState variables that will say when a user has clicked something and we also have to keep track of which video is playing.
@@ -90,7 +92,7 @@ const Hero = () => {
           <video
             // Checking if we are at the last video, in that case re-set it equal to 1.
             src={getVideoSrc(currentIndex === totalVideos - 1 ? 1 : currentIndex)}
-            autoPlay
+            // autoPlay // This allows the video to loop and play. 
             loop
             muted
             className="absolute left-0 top-0 size-full object-cover object-center"
@@ -105,8 +107,17 @@ const Hero = () => {
           <div className="mt-24 px-5 sm:px-10">
             <h1 className="special-font hero-heading text-blue-100">redefi<b>n</b>e</h1>
             <p className="mb-5 max-w-64 font-robert-regular text-blue-100">Enter the Metagame Layer <br />Unleash the Play Economy</p>
+
+            {/* For the left icon, we can install a package that allows to use many different icons. Which is React-icons (https://react-icons.github.io/react-icons/) */}
+            {/* Since in the style className of the button in the Button component, already defines a background color (bg-violet-50) the yellow background (bg-yellow-300) that we are passing in the containerClass does not "override"/"takes over" on the bg-violet-50.
+            In order to make the bg-yellow-300 class more important we add a ! in front of it. */}
+            <Button id="watch-trailer" title="Watch Trailer" leftIcon={<TiLocationArrow />} containerClass="!bg-yellow-300 flex-center gap-1" />
           </div>
         </div>
+        {/* Add the same <div> with the GAMING with a black color, under the white same text. It is under it because it does not have the z-40. When scrolling the page then the write will come out. */}
+        <h1 className="special-font hero-heading absolute bottom-5 right-5 text-black">
+          G<b>A</b>MING
+        </h1>
       </div>
     </div>
   )
