@@ -21,7 +21,7 @@ const Hero = () => {
   const nextVideoRef = useRef(null);
 
   // Define the function for handle the loadedData.
-  const handleVideoLoaded = () => {
+  const handleVideoLoad = () => {
     // (prevLoadedVideo) => prevLoadedVideo + 1 => is the callback function. 
     // The arrow function ((prevLoadedVideo) => prevLoadedVideo + 1) inside setLoadedVideo works because React's setState function provides an optional function form. This functional form takes a callback function as an argument, and React automatically passes the current state value (or "previous state") as the parameter to this function. 
     // React automatically passes the most recent value of loadedVideos as the argument (prevLoadedVideo) to the arrow function.
@@ -47,7 +47,10 @@ const Hero = () => {
   }
 
   // Define the source of the videos to be played. As a function that will return the source of the videos, with the index in their name. Givin the path of each video source.
+  // In JS, if the function body consists of a single expression, you can omit both the curly braces {} and the return keyword.
   const getVideoSrc = (index) => `videos/hero-${index}.mp4`;
+  
+  // In order to animate the page, we will take advantage and use the GSAP (https://gsap.com/) which is a widely used and robust JavaScript animation library.
 
   return (
     // h-dvh => Sets the height of an element to the dynamic viewport height (dvh), which is a CSS unit introduced to handle viewport height changes, especially on mobile devices with UI overlays. 
@@ -56,10 +59,10 @@ const Hero = () => {
     <div className="relative h-dvh w-screen overflow-x-hidden">
       {/* Creating a div which will contain the video of the initial screen */}
       {/* z-10 => So that this video will appear above other content */}
-      <div id="video-frame" className="relative z-10 h-dvh w-screen overflow-hidden rounded-lg bg-blue-75 border border-red-600">
-        <div className="border border-blue-700">
+      <div id="video-frame" className="relative z-10 h-dvh w-screen overflow-hidden rounded-lg bg-blue-75"> { /* border border-red-600 */}
+        <div>  {/*  className="border border-blue-700" */}
           {/* mask-clip-path => our special css class name */}
-          <div className="mask-clip-path absolute-center absolute z-50 size-64 cursor-pointer overflow-hidden rounded-lg border border-green-700">
+          <div className="mask-clip-path absolute-center absolute z-50 size-64 cursor-pointer overflow-hidden rounded-lg"> {/* border border-green-700 */}
             {/* Creating another div, which will actually be a mini video player. */}
             <div onClick={handleMiniVideoClick} className="origin-center scale-50 opacity-0 transition-all duration-500 ease-in hover:scale-100 hover:opacity-100">
               {/* Implement the video player as a HTML self-closing video tag */}
@@ -73,7 +76,7 @@ const Hero = () => {
                 // scale-150 => utility class used to apply a scale transformation to an element, increasing or decreasing its size relative to its original size. It scales the element 150% of its original size.
                 className="size-64 origin-center scale-150 object-cover object-center"
                 // onLoadedData => is a special function that is called when the data is loaded.
-                onLoadedData={handleVideoLoaded}
+                onLoadedData={handleVideoLoad}
               />
             </div>
           </div>
@@ -85,18 +88,18 @@ const Hero = () => {
             muted
             id="next video"
             className="absolute-center invisible z-20 size-64 object-cover object-center"
-            onLoadedData={handleVideoLoaded}
+            onLoadedData={handleVideoLoad}
           />
 
           {/* Define another video player. */}
           <video
             // Checking if we are at the last video, in that case re-set it equal to 1.
             src={getVideoSrc(currentIndex === totalVideos - 1 ? 1 : currentIndex)}
-            // autoPlay // This allows the video to loop and play. 
+            autoPlay // This allows the video to loop and play. 
             loop
             muted
             className="absolute left-0 top-0 size-full object-cover object-center"
-            onLoadedData={handleVideoLoaded}
+            onLoadedData={handleVideoLoad}
           />
         </div>
         <h1 className="special-font hero-heading absolute bottom-5 right-5 z-40 text-blue-75">
@@ -114,11 +117,11 @@ const Hero = () => {
             <Button id="watch-trailer" title="Watch Trailer" leftIcon={<TiLocationArrow />} containerClass="!bg-yellow-300 flex-center gap-1" />
           </div>
         </div>
-        {/* Add the same <div> with the GAMING with a black color, under the white same text. It is under it because it does not have the z-40. When scrolling the page then the write will come out. */}
-        <h1 className="special-font hero-heading absolute bottom-5 right-5 text-black">
-          G<b>A</b>MING
-        </h1>
       </div>
+      {/* Add the same <div> with the GAMING with a black color, under the white same text. It is under it because it does not have the z-40. When scrolling the page then the write will come out. */}
+      <h1 className="special-font hero-heading absolute bottom-5 right-5 text-black">
+        G<b>A</b>MING
+      </h1>
     </div>
   )
 }
