@@ -2,6 +2,7 @@ import { useRef, useState } from "react"
 import Button from "./Button";
 import { TiLocationArrow } from "react-icons/ti";
 import { useGSAP } from "@gsap/react";
+import gsap from 'gsap';
 
 const Hero = () => {
   // Define some useState variables that will say when a user has clicked something and we also have to keep track of which video is playing.
@@ -54,7 +55,32 @@ const Hero = () => {
   // In order to animate the page, we will take advantage and use the GSAP (https://gsap.com/) which is a widely used and robust JavaScript animation library.
   // GSAP is a powerful JavaScript library for creating high-performance animations on the web. It's widely used by developers and designers to build smooth, complex, and professional animation with ease. 
   // Once installed, you can use the hook GSAP hook like this:
-  useGSAP
+  useGSAP(() => {
+    // If it is clicked, it means that we have entered the this new world video.
+    if (hasClicked) {
+      // Call the gsap (which is the base library imported from gsap)
+      // The first parameter to the set you pass the ID or the identifier to the element that you want to animate. In this case we want to animate the next video. By setting the visibility to visible.  
+      gsap.set('#next-video', {visibility: "visible"});
+      // We are going to animate the next video to the following set of animations (also called twins).
+      gsap.to("#next-video", {
+        transformOrigin: 'center center',
+        scale: 1,
+        width: '100%',
+        height: '100%',
+        duration: 1,
+        ease: 'power1.inOut',
+        onStart: () => nextVideoRef.current.play(),
+      })
+
+      // Animate from.
+      gsap.from('#current-video', {
+        transformOrigin: 'center center',
+        scale: 0,
+        duration: 1.5,
+        ease: 'power1.inOut'
+      })
+    }
+  }, {dependencies: [currentIndex], revertOnUpdate: true}) // The code will be executed every time the currentIndex value changes.
 
   return (
     // h-dvh => Sets the height of an element to the dynamic viewport height (dvh), which is a CSS unit introduced to handle viewport height changes, especially on mobile devices with UI overlays. 
@@ -90,7 +116,7 @@ const Hero = () => {
             src={getVideoSrc(currentIndex)}
             loop
             muted
-            id="next video"
+            id="next-video"
             className="absolute-center invisible z-20 size-64 object-cover object-center"
             onLoadedData={handleVideoLoad}
           />
