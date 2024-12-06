@@ -1,6 +1,7 @@
 import { useRef, useState } from "react"
 import Button from "./Button";
 import { TiLocationArrow } from "react-icons/ti";
+import { useGSAP } from "@gsap/react";
 
 const Hero = () => {
   // Define some useState variables that will say when a user has clicked something and we also have to keep track of which video is playing.
@@ -49,8 +50,11 @@ const Hero = () => {
   // Define the source of the videos to be played. As a function that will return the source of the videos, with the index in their name. Givin the path of each video source.
   // In JS, if the function body consists of a single expression, you can omit both the curly braces {} and the return keyword.
   const getVideoSrc = (index) => `videos/hero-${index}.mp4`;
-  
+
   // In order to animate the page, we will take advantage and use the GSAP (https://gsap.com/) which is a widely used and robust JavaScript animation library.
+  // GSAP is a powerful JavaScript library for creating high-performance animations on the web. It's widely used by developers and designers to build smooth, complex, and professional animation with ease. 
+  // Once installed, you can use the hook GSAP hook like this:
+  useGSAP
 
   return (
     // h-dvh => Sets the height of an element to the dynamic viewport height (dvh), which is a CSS unit introduced to handle viewport height changes, especially on mobile devices with UI overlays. 
