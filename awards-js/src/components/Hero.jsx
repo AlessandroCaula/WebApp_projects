@@ -52,35 +52,49 @@ const Hero = () => {
   // In JS, if the function body consists of a single expression, you can omit both the curly braces {} and the return keyword.
   const getVideoSrc = (index) => `videos/hero-${index}.mp4`;
 
+
   // In order to animate the page, we will take advantage and use the GSAP (https://gsap.com/) which is a widely used and robust JavaScript animation library.
   // GSAP is a powerful JavaScript library for creating high-performance animations on the web. It's widely used by developers and designers to build smooth, complex, and professional animation with ease. 
+  // This block of code uses the GSAP animation library in a React environment to animate elements when a video changes.
   // Once installed, you can use the hook GSAP hook like this:
+  // the useGSAP hook is a wrapper for initializing GSAP animations in React. It allows you to manage the animations within React's lifecycle. 
+  // The callback function () => {} Executes when dependencies change.
+  // Options:
+  //  - dependencies: React state or props that trigger the animation (here, currentIndex)
+  //  - revertOnUpdate: Ensures previous animations are undone when dependencies update.
   useGSAP(() => {
     // If it is clicked, it means that we have entered the this new world video.
+    // The animation logic: The callback function animates two video elements (#next-video and #current-video) when the hasClicked state is true.
+    // Checking if the video was clicked. Ensures the animation logic only runs after the user clicks on the mini video. 
     if (hasClicked) {
       // Call the gsap (which is the base library imported from gsap)
       // The first parameter to the set you pass the ID or the identifier to the element that you want to animate. In this case we want to animate the next video. By setting the visibility to visible.  
+      // Makes sure the video element appears on the page before animations begin. 
       gsap.set('#next-video', {visibility: "visible"});
       // We are going to animate the next video to the following set of animations (also called twins).
+      // Animates the target element to a specific final state. 
       gsap.to("#next-video", {
-        transformOrigin: 'center center',
-        scale: 1,
-        width: '100%',
-        height: '100%',
-        duration: 1,
-        ease: 'power1.inOut',
-        onStart: () => nextVideoRef.current.play(),
+        transformOrigin: 'center center', // Animation originates from the center
+        scale: 1, // Scales the video to its original size.
+        width: '100%', // Animates to cover 100% of the container width.
+        height: '100%', // Animates to cover 100% of the container height.
+        duration: 1, // Animation lasts 1 second.
+        ease: 'power1.inOut', // Smoothing function for animations. 
+        onStart: () => nextVideoRef.current.play(), // Callback that starts the video playback.
       })
 
-      // Animate from.
+      // The current-video animates from a shrunken (invisible) state to full size.
       gsap.from('#current-video', {
-        transformOrigin: 'center center',
-        scale: 0,
-        duration: 1.5,
-        ease: 'power1.inOut'
+        transformOrigin: 'center center', // Animation starts from the center. 
+        scale: 0, // Starts scaled down to 0 (invisible) and scales up.
+        duration: 1.5, // Lasts 1.5 seconds for a smoother effect.
+        ease: 'power1.inOut' // Uses a similar easing function as #next-video
       })
     }
-  }, {dependencies: [currentIndex], revertOnUpdate: true}) // The code will be executed every time the currentIndex value changes.
+  }, {dependencies: [currentIndex], revertOnUpdate: true}) // The code will be executed every time the currentIndex value changes. RevertOnUpdate: automatically undoes the current animation before applying a new one, ensure smooth transitions. 
+
+  // In order to achieve another smooth animation of the video when scrolling the page down, we can use another GSAP hook.
+  
 
   return (
     // h-dvh => Sets the height of an element to the dynamic viewport height (dvh), which is a CSS unit introduced to handle viewport height changes, especially on mobile devices with UI overlays. 
