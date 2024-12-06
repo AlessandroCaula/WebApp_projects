@@ -94,7 +94,7 @@ const Hero = () => {
   }, {dependencies: [currentIndex], revertOnUpdate: true}) // The code will be executed every time the currentIndex value changes. RevertOnUpdate: automatically undoes the current animation before applying a new one, ensure smooth transitions. 
 
   // In order to achieve another smooth animation of the video when scrolling the page down, we can use another GSAP hook.
-  
+
 
   return (
     // h-dvh => Sets the height of an element to the dynamic viewport height (dvh), which is a CSS unit introduced to handle viewport height changes, especially on mobile devices with UI overlays. 
