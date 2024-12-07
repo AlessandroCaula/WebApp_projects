@@ -94,7 +94,22 @@ const Hero = () => {
   }, {dependencies: [currentIndex], revertOnUpdate: true}) // The code will be executed every time the currentIndex value changes. RevertOnUpdate: automatically undoes the current animation before applying a new one, ensure smooth transitions. 
 
   // In order to achieve another smooth animation of the video when scrolling the page down, we can use another GSAP hook.
+  // Within this hook we don't have to add any dependency.
+  useGSAP(() => {
+    gsap.set('#video-frame', {
+      // A clip-path in CSS is a property that defines a clipping region for an element, effectively determining which parts of the element are visible and which part are hidden. The clipping acts as a mask, allowing you to display only a specific portion of an element while hiding the rest. 
+      // You can create your custom clip-path with a clip-path maker online (https://bennettfeely.com/clippy/)
+      // In GSAP, the clipPath property allows you to animate the clipping of elements, similar to how clip-path works on CSS, but with more control and ease for complex animations. With GSAP, you can animate the clipping region, enabling effects like revealing or hiding parts of an element over time. 
+      clipPath: 'polygon(14% 0%, 72% 0%, 90% 90%, 0% 100%)', // We only want to apply this clipPath on scroll. 
+      borderRadius: '0 0 40% 10%',
+    })
 
+    // Animate the gsap.from. So the starting animation. From where we want to start. 
+    gsap.from('#video-frame', {
+      // And we wanna start from a full polygon, we don't want to have any cut corners yet.
+      clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
+    })
+  })
 
   return (
     // h-dvh => Sets the height of an element to the dynamic viewport height (dvh), which is a CSS unit introduced to handle viewport height changes, especially on mobile devices with UI overlays. 
@@ -114,7 +129,7 @@ const Hero = () => {
               <video
                 ref={nextVideoRef}
                 src={getVideoSrc(upcomingVideoIndex)}
-                loop
+                // loop
                 muted
                 id='current-video'
                 // scale-150 => utility class used to apply a scale transformation to an element, increasing or decreasing its size relative to its original size. It scales the element 150% of its original size.
