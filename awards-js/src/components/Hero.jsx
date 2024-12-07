@@ -8,6 +8,9 @@ import { ScrollTrigger } from "gsap/all";
 // gsap scrollTrigger is a plugin that we have to enable it here at the top to be able to use it. 
 gsap.registerPlugin(ScrollTrigger);
 
+// ##
+// The HERO section of a Webpage refers to the prominent, introductory area area typically placed at the top of the page. It's called Hero 
+
 const Hero = () => {
   // Define some useState variables that will say when a user has clicked something and we also have to keep track of which video is playing.
   const [currentIndex, setCurrentIndex] = useState(1);
@@ -18,7 +21,7 @@ const Hero = () => {
   const [loadedVideos, setLoadedVideos] = useState(0);
 
   // Define the number of total video which you want to play (in this case we are set it to 4)
-  const totalVideos = 3;
+  const totalVideos = 4;
   // We also have to define the reference which will allow to then switch between those videos or to target the video player within which will play the videos.
   // In react you use the useRef hook to create a reference to a DOM element.
   // The DOM (Document Object Model) is a programming interface for web documents. It represents the structure of a web page as a tree of objects, where each element (like a <div>, <p>, or <img) is a node in the tree. This structure allows programming languages, like JavaScript, to dynamically interact with and manipulate the content, structure, and styling of a webpage.
@@ -34,37 +37,37 @@ const Hero = () => {
     setLoadedVideos((prevLoadedVideo) => prevLoadedVideo + 1);
   }
 
-  // Since there are only 4 videos, we can only try to go up to three but then it is more than that we need to go back to 0 (the first video). This is the perfect use case for the Modulo Operator.
-  // The modulo operator (%) returns the remainder of the division of two numbers. 7 % 3 = 1 (3*2 + 1). 15 % 4 = 3 (4*3 + 3).
-  // 0 % 4 = 0 then + 1 => 1
-  // 1 % 4 = 1 then + 1 => 2
-  // 2 % 4 = 2 then + 1 => 3
-  // 3 % 4 = 3 then + 1 => 4
-  // 4 % 4 = 0 then + 1 => 1 (and then at this point we start from the beginning)
-  // In this case, the upcomingVideoIndex variable does not automatically updates itself because it is a regular constant, not tied to React's state system. It is only calculated onces when the component renders. However, when you click the mini video player, the handleMiniVideoClick function triggers a state update (setCurrentIndex), which causes the component to re-render. During this re-render, the upcomingVideoIndex is recalculated because it depends on the update value of currentIndex.
-  const upcomingVideoIndex = (currentIndex % totalVideos) + 1;
+  // // Since there are only 4 videos, we can only try to go up to three but then it is more than that we need to go back to 0 (the first video). This is the perfect use case for the Modulo Operator.
+  // // The modulo operator (%) returns the remainder of the division of two numbers. 7 % 3 = 1 (3*2 + 1). 15 % 4 = 3 (4*3 + 3).
+  // // 0 % 4 = 0 then + 1 => 1
+  // // 1 % 4 = 1 then + 1 => 2
+  // // 2 % 4 = 2 then + 1 => 3
+  // // 3 % 4 = 3 then + 1 => 4
+  // // 4 % 4 = 0 then + 1 => 1 (and then at this point we start from the beginning)
+  // // In this case, the upcomingVideoIndex variable does not automatically updates itself because it is a regular constant, not tied to React's state system. It is only calculated onces when the component renders. However, when you click the mini video player, the handleMiniVideoClick function triggers a state update (setCurrentIndex), which causes the component to re-render. During this re-render, the upcomingVideoIndex is recalculated because it depends on the update value of currentIndex.
+  // const upcomingVideoIndex = (currentIndex % totalVideos) + 1;
+
+  // useEffect hook used to check if the video has loaded. 
+  // Whenever loadedVideo changes this useEffect is recall. And check if loaded video is equal to the total number of videos.
+  useEffect(() => {
+    if (loadedVideos === totalVideos - 1) {
+      //  Set the loading to false
+      setLoading(false);
+    }
+  }, [loadedVideos]);
 
   // Define some new functions that will handle the mini video player. This video player will show different videos when clicking in the middle of the screen.
   const handleMiniVideoClick = () => {
     // When the mini-player is clicked we want to set the hasClicked state to true.
     setHasClicked(true);
     // We also want to set the currentIndex equal to the upcomingVideoIndex which uses the modulo operator to avoid to go beyond the total number of videos.
-    setCurrentIndex(upcomingVideoIndex);
+    // 0 % 4 = 0 then + 1 => 1
+    // 1 % 4 = 1 then + 1 => 2
+    // 2 % 4 = 2 then + 1 => 3
+    // 3 % 4 = 3 then + 1 => 4
+    // 4 % 4 = 0 then + 1 => 1
+    setCurrentIndex((prevIndex) => (prevIndex % totalVideos + 1)); // upcomingVideoIndex
   }
-
-  // useEffect hook used to check if the video has loaded. 
-  // Whenever loadedVideo changes this useEffect is recall. And check if loaded video is equal to the total number of videos.
-  useEffect (() => {
-    if (loadedVideos === totalVideos - 1) {
-      //  Set the loading to false
-      setLoading(false);
-    }
-  }, [loadedVideos])
-
-  // Define the source of the videos to be played. As a function that will return the source of the videos, with the index in their name. Givin the path of each video source.
-  // In JS, if the function body consists of a single expression, you can omit both the curly braces {} and the return keyword.
-  const getVideoSrc = (index) => `videos/hero-${index}.mp4`;
-
 
   // In order to animate the page, we will take advantage and use the GSAP (https://gsap.com/) which is a widely used and robust JavaScript animation library.
   // GSAP is a powerful JavaScript library for creating high-performance animations on the web. It's widely used by developers and designers to build smooth, complex, and professional animation with ease. 
@@ -83,7 +86,7 @@ const Hero = () => {
       // Call the gsap (which is the base library imported from gsap)
       // The first parameter to the set you pass the ID or the identifier to the element that you want to animate. In this case we want to animate the next video. By setting the visibility to visible.  
       // Makes sure the video element appears on the page before animations begin. 
-      gsap.set('#next-video', {visibility: "visible"});
+      gsap.set('#next-video', { visibility: "visible" });
       // We are going to animate the next video to the following set of animations (also called twins).
       // Animates the target element to a specific final state. 
       gsap.to("#next-video", {
@@ -94,17 +97,21 @@ const Hero = () => {
         duration: 1, // Animation lasts 1 second.
         ease: 'power1.inOut', // Smoothing function for animations. 
         onStart: () => nextVideoRef.current.play(), // Callback that starts the video playback.
-      })
-
+      });
       // The current-video animates from a shrunken (invisible) state to full size.
       gsap.from('#current-video', {
         transformOrigin: 'center center', // Animation starts from the center. 
         scale: 0, // Starts scaled down to 0 (invisible) and scales up.
         duration: 1.5, // Lasts 1.5 seconds for a smoother effect.
         ease: 'power1.inOut' // Uses a similar easing function as #next-video
-      })
+      });
     }
-  }, {dependencies: [currentIndex], revertOnUpdate: true}) // The code will be executed every time the currentIndex value changes. RevertOnUpdate: automatically undoes the current animation before applying a new one, ensure smooth transitions. 
+  }, {
+    // The code will be executed every time the currentIndex value changes. RevertOnUpdate: automatically undoes the current animation before applying a new one, ensure smooth transitions. 
+    dependencies: [currentIndex],
+    revertOnUpdate: true
+  }
+  );
 
   // In order to achieve another smooth animation of the video when scrolling the page down, we can use another GSAP hook.
   // Within this hook we don't have to add any dependency.
@@ -115,8 +122,7 @@ const Hero = () => {
       // In GSAP, the clipPath property allows you to animate the clipping of elements, similar to how clip-path works on CSS, but with more control and ease for complex animations. With GSAP, you can animate the clipping region, enabling effects like revealing or hiding parts of an element over time. 
       clipPath: 'polygon(14% 0%, 72% 0%, 90% 90%, 0% 100%)', // We only want to apply this clipPath on scroll. 
       borderRadius: '0 0 40% 10%', // Add rounded corners at the bottom. 40% on the bottom right, 10% on the bottom left. 
-    })
-
+    });
     // Animate the gsap.from. So the ting animation. From where we want to start. 
     gsap.from('#video-frame', {
       // And we wanna start from a full polygon, we don't want to have any cut corners yet.
@@ -128,9 +134,13 @@ const Hero = () => {
         start: "center center", // Animation starts when the trigger is at the center of the viewport
         end: "bottom center", // Animation ends when the trigger reaches the bottom center of the viewport
         scrub: true, // Smoothly ties the animation to scrolling
-      }
-    })
-  })
+      },
+    });
+  });
+
+  // Define the source of the videos to be played. As a function that will return the source of the videos, with the index in their name. Givin the path of each video source.
+  // In JS, if the function body consists of a single expression, you can omit both the curly braces {} and the return keyword.
+  const getVideoSrc = (index) => `videos/hero-${index}.mp4`;
 
   return (
     // h-dvh => Sets the height of an element to the dynamic viewport height (dvh), which is a CSS unit introduced to handle viewport height changes, especially on mobile devices with UI overlays. 
@@ -140,29 +150,35 @@ const Hero = () => {
       {/* If isLoading is true we can render a div */}
       {loading && (
         // This div will be a loading div
-    <div className="flex-center absolute z-[100] h-dvh w-screen overflow-hidden bg-violet-50">
-      {/* The three-body is a special class defined in the index.css file. It will be three little dots that are spinning around each other  */}
-      {/* https://uiverse.io/G4b413l/tidy-walrus-92 */}
-      <div className="three-body">
-        <div className="three-body__dot"></div>
-        <div className="three-body__dot"></div>
+        <div className="flex-center absolute z-[100] h-dvh w-screen overflow-hidden bg-violet-50">
+          {/* The three-body is a special class defined in the index.css file. It will be three little dots that are spinning around each other  */}
+          {/* https://uiverse.io/G4b413l/tidy-walrus-92 */}
+          <div className="three-body">
+            <div className="three-body__dot"></div>
+            <div className="three-body__dot"></div>
             <div className="three-body__dot"></div>
           </div>
         </div>
       )}
       {/* Creating a div which will contain the video of the initial screen */}
       {/* z-10 => So that this video will appear above other content */}
-      <div id="video-frame" className="relative z-10 h-dvh w-screen overflow-hidden rounded-lg bg-blue-75"> { /* border border-red-600 */}
-        <div>  {/*  className="border border-blue-700" */}
+      <div 
+        id="video-frame" 
+        className="relative z-10 h-dvh w-screen overflow-hidden rounded-lg bg-blue-75"
+        >
+        <div>
           {/* mask-clip-path => our special css class name */}
           <div className="mask-clip-path absolute-center absolute z-50 size-64 cursor-pointer overflow-hidden rounded-lg"> {/* border border-green-700 */}
             {/* Creating another div, which will actually be a mini video player. */}
-            <div onClick={handleMiniVideoClick} className="origin-center scale-50 opacity-0 transition-all duration-500 ease-in hover:scale-100 hover:opacity-100">
+            <div 
+              onClick={handleMiniVideoClick} 
+              className="origin-center scale-50 opacity-0 transition-all duration-500 ease-in hover:scale-100 hover:opacity-100"
+            >
               {/* Implement the video player as a HTML self-closing video tag */}
               {/* This video player will have the zoom effect. */}
               <video
                 ref={nextVideoRef}
-                src={getVideoSrc(upcomingVideoIndex)}
+                src={getVideoSrc((currentIndex % totalVideos) + 1)}
                 loop
                 muted
                 id='current-video'
@@ -187,7 +203,9 @@ const Hero = () => {
           {/* Define another video player. */}
           <video
             // Checking if we are at the last video, in that case re-set it equal to 1.
-            src={getVideoSrc(currentIndex === totalVideos - 1 ? 1 : currentIndex)}
+            src={getVideoSrc(
+              currentIndex === totalVideos - 1 ? 1 : currentIndex
+            )}
             autoPlay // This allows the video to loop and play. 
             loop
             muted
