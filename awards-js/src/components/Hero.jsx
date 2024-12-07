@@ -1,15 +1,19 @@
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import Button from "./Button";
 import { TiLocationArrow } from "react-icons/ti";
 import { useGSAP } from "@gsap/react";
 import gsap from 'gsap';
+import { ScrollTrigger } from "gsap/all";
+
+// gsap scrollTrigger is a plugin that we have to enable it here at the top to be able to use it. 
+gsap.registerPlugin(ScrollTrigger);
 
 const Hero = () => {
   // Define some useState variables that will say when a user has clicked something and we also have to keep track of which video is playing.
   const [currentIndex, setCurrentIndex] = useState(1);
   const [hasClicked, setHasClicked] = useState(false);
   // Setting the isLoading state to true as initial state, caus usually a video takes some time to load.
-  const [isLoading, setIsLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
   // Define another useState for the number of video that has loaded.
   const [loadedVideos, setLoadedVideos] = useState(0);
 
@@ -18,7 +22,7 @@ const Hero = () => {
   // We also have to define the reference which will allow to then switch between those videos or to target the video player within which will play the videos.
   // In react you use the useRef hook to create a reference to a DOM element.
   // The DOM (Document Object Model) is a programming interface for web documents. It represents the structure of a web page as a tree of objects, where each element (like a <div>, <p>, or <img) is a node in the tree. This structure allows programming languages, like JavaScript, to dynamically interact with and manipulate the content, structure, and styling of a webpage.
-  // useRef is a React hook used to create a mutable reference object that persists across renders. It provides access to a .current property where you can store a value that doesn't trigger a re-render when it changes.
+  // useRef is a React hook used to create a mutable reference object that persists across renders. It provides access to a current property where you can store a value that doesn't trigger a re-render when it changes.
   // We are going to use it to target the <div> within which we want to play the videos.
   const nextVideoRef = useRef(null);
 
@@ -47,6 +51,15 @@ const Hero = () => {
     // We also want to set the currentIndex equal to the upcomingVideoIndex which uses the modulo operator to avoid to go beyond the total number of videos.
     setCurrentIndex(upcomingVideoIndex);
   }
+
+  // useEffect hook used to check if the video has loaded. 
+  // Whenever loadedVideo changes this useEffect is recall. And check if loaded video is equal to the total number of videos.
+  useEffect (() => {
+    if (loadedVideos === totalVideos - 1) {
+      //  Set the loading to false
+      setLoading(false);
+    }
+  }, [loadedVideos])
 
   // Define the source of the videos to be played. As a function that will return the source of the videos, with the index in their name. Givin the path of each video source.
   // In JS, if the function body consists of a single expression, you can omit both the curly braces {} and the return keyword.
@@ -101,13 +114,21 @@ const Hero = () => {
       // You can create your custom clip-path with a clip-path maker online (https://bennettfeely.com/clippy/)
       // In GSAP, the clipPath property allows you to animate the clipping of elements, similar to how clip-path works on CSS, but with more control and ease for complex animations. With GSAP, you can animate the clipping region, enabling effects like revealing or hiding parts of an element over time. 
       clipPath: 'polygon(14% 0%, 72% 0%, 90% 90%, 0% 100%)', // We only want to apply this clipPath on scroll. 
-      borderRadius: '0 0 40% 10%',
+      borderRadius: '0 0 40% 10%', // Add rounded corners at the bottom. 40% on the bottom right, 10% on the bottom left. 
     })
 
-    // Animate the gsap.from. So the starting animation. From where we want to start. 
+    // Animate the gsap.from. So the ting animation. From where we want to start. 
     gsap.from('#video-frame', {
       // And we wanna start from a full polygon, we don't want to have any cut corners yet.
-      clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
+      clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)', // Start with a full rectangle (no clipping)
+      borderRadius: '0 0 0 0', // Start with no rounded corners
+      ease: 'power1.inOut', // Easing function for smoothing animation
+      scrollTrigger: { // Trigger animation based on scrolling
+        trigger: "#video-frame", // Element that triggers the animation
+        start: "center center", // Animation starts when the trigger is at the center of the viewport
+        end: "bottom center", // Animation ends when the trigger reaches the bottom center of the viewport
+        scrub: true, // Smoothly ties the animation to scrolling
+      }
     })
   })
 
@@ -116,6 +137,19 @@ const Hero = () => {
     // Unlike vh, which uses a static viewport height, dvh dynamically adjusts the height based on the available space in the viewport.
     // w-screen => The width of the screen will be the 100% of the screen width
     <div className="relative h-dvh w-screen overflow-x-hidden">
+      {/* If isLoading is true we can render a div */}
+      {loading && (
+        // This div will be a loading div
+    <div className="flex-center absolute z-[100] h-dvh w-screen overflow-hidden bg-violet-50">
+      {/* The three-body is a special class defined in the index.css file. It will be three little dots that are spinning around each other  */}
+      {/* https://uiverse.io/G4b413l/tidy-walrus-92 */}
+      <div className="three-body">
+        <div className="three-body__dot"></div>
+        <div className="three-body__dot"></div>
+            <div className="three-body__dot"></div>
+          </div>
+        </div>
+      )}
       {/* Creating a div which will contain the video of the initial screen */}
       {/* z-10 => So that this video will appear above other content */}
       <div id="video-frame" className="relative z-10 h-dvh w-screen overflow-hidden rounded-lg bg-blue-75"> { /* border border-red-600 */}
@@ -129,7 +163,7 @@ const Hero = () => {
               <video
                 ref={nextVideoRef}
                 src={getVideoSrc(upcomingVideoIndex)}
-                // loop
+                loop
                 muted
                 id='current-video'
                 // scale-150 => utility class used to apply a scale transformation to an element, increasing or decreasing its size relative to its original size. It scales the element 150% of its original size.
