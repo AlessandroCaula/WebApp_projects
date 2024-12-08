@@ -10,10 +10,7 @@ const App = () => {
       <Hero />
       
       <About />
-
-      {/* Creating a section just to test the scrolling of the main page */}
-      {/* The min-h-screen is a utility class that sets the minimum heigh of an element to be equal to the height of the viewport */}
-      <section className="z-0 min-h-screen bg-blue-500"/>
+      
     </main>
   )
 }
