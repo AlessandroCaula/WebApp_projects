@@ -8,9 +8,6 @@ import { ScrollTrigger } from "gsap/all";
 // gsap scrollTrigger is a plugin that we have to enable it here at the top to be able to use it. 
 gsap.registerPlugin(ScrollTrigger);
 
-// ##
-// The HERO section of a Webpage refers to the prominent, introductory area area typically placed at the top of the page. It's called Hero 
-
 const Hero = () => {
   // Define some useState variables that will say when a user has clicked something and we also have to keep track of which video is playing.
   const [currentIndex, setCurrentIndex] = useState(1);
@@ -206,7 +203,7 @@ const Hero = () => {
             src={getVideoSrc(
               currentIndex === totalVideos - 1 ? 1 : currentIndex
             )}
-            autoPlay // This allows the video to loop and play. 
+            // autoPlay // This allows the video to loop and play. 
             loop
             muted
             className="absolute left-0 top-0 size-full object-cover object-center"

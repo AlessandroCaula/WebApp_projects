@@ -10,6 +10,12 @@ gsap.registerPlugin(ScrollTrigger);
 const AnimatedTitle = ({ title, containerClass }) => {
 
   // Define a new useRef hook. And attach it to the container. 
+  // ContainerRef is a reference created using the useRef hook in React. It provides a way to directly access the DOM element associated with the React component. 
+  // - useRef(null): Initializes the reference with a null value. This is because the DOM element isn't available yet during the initial render. When the component mounts, React updates containerRef.current to point to the actual DOM node of the <div> element that has the ref={containerRef} attribute.
+  // Why is containerRef used? To target the DOM element for animation:
+  //  - GSAP animations are applied to real DOM elements. 
+  //  - React abstracts away direct DOM manipulation, so you can't access the DOM directly in the React component without using a ref.
+  //  - containerRef.current => Gives GSAP direct access to the DOM element so it can trigger animations on it.
   const containerRef = useRef(null);
 
   // Define a new useEffect hook, which will allow us to perform some actions whenever things on the page change.
@@ -22,7 +28,7 @@ const AnimatedTitle = ({ title, containerClass }) => {
       // We can now create some animation and timeline animation within this context.
       // gsapTimeline => Creates a sequence of animations that run in order and can be synchronized. 
       const titleAnimation = gsap.timeline({
-        // scrollTrigger => A GSAP plugin that triggers animations based on scroll events. 
+        // scrollTrigger => A GSAP plugin that triggers animations based on scroll events. This means the animation will activate when the containerRef element comes into view. 
         scrollTrigger: {
           // - Scrolling trigger options. 
           trigger: containerRef.current, // The elements that activates the animation. The trigger will happen once we reach the containerRef
