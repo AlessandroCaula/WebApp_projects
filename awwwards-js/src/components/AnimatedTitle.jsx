@@ -32,15 +32,18 @@ const AnimatedTitle = ({ title, containerClass }) => {
         },
       });
 
+      // The to() method defines an animation that modifies the specified properties of the target elements over time. 
       titleAnimation.to(
+        // Target: ".animated-word" => This is a CSS selector that specifies which elements should be animated. In this case, it targets all elements with the class .animated-word.
         ".animated-word",
+        // This second argument is an object that specifies the properties to animate and their final values. 
         {
-          opacity: 1,
-          transform: 'translate3d(0, 0, 0) rotateY(0deg) rotateX(0deg)',
-          ease: 'power2.inOut',
-          stagger: 0.02,
+          opacity: 1, // Makes the element fully visible by animating its opacity from its current value to 1. 
+          transform: 'translate3d(0, 0, 0) rotateY(0deg) rotateX(0deg)', // This resets the position and rotation of the elements. translate(0, 0, 0) => Moves the element to its original position in 3D space (no offset in X, Y or Z axis). rotateY(0deg) rotateX(0deg) => Ensure the element is not rotated around the Y or X axis. 
+          ease: 'power2.inOut', // inOut => creates a smooth effect where the animation starts slowly, speeds up in the middle, and slows down at the end. 
+          stagger: 0.02, // Creates a delay of 0.02 seconds between animations for each .animated-word. This results in a "staggered" or sequential animation effect, where words animate one after the other. 
         },
-        0
+        0 // This third argument specifies where in the timeline this animation should start. 
       );
     }, containerRef); // containerRef => The scope or reference to an element that the animations will be applied to. Usually, this is created using React's useRef. 
 
