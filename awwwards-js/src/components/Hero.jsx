@@ -26,6 +26,11 @@ const Hero = () => {
   // We are going to use it to target the <div> within which we want to play the videos.
   const nextVideoRef = useRef(null);
 
+  // The key difference between React component and DOM elements lies in their roles within a React application and how they are managed.
+  // React COMPONENT are JavaScript functions or classes that return React elements. They represent reusable pieces of UI.
+  // DOM elements are the actual HTML elements that React renders into the browser. They are basic building blocks like <div>, <span>, <button>, etc. 
+  // DOM elements define the structure and appearance of a webpage in the browser. 
+
   // Define the function for handle the loadedData.
   const handleVideoLoad = () => {
     // (prevLoadedVideo) => prevLoadedVideo + 1 => is the callback function. 
@@ -33,16 +38,6 @@ const Hero = () => {
     // React automatically passes the most recent value of loadedVideos as the argument (prevLoadedVideo) to the arrow function.
     setLoadedVideos((prevLoadedVideo) => prevLoadedVideo + 1);
   }
-
-  // // Since there are only 4 videos, we can only try to go up to three but then it is more than that we need to go back to 0 (the first video). This is the perfect use case for the Modulo Operator.
-  // // The modulo operator (%) returns the remainder of the division of two numbers. 7 % 3 = 1 (3*2 + 1). 15 % 4 = 3 (4*3 + 3).
-  // // 0 % 4 = 0 then + 1 => 1
-  // // 1 % 4 = 1 then + 1 => 2
-  // // 2 % 4 = 2 then + 1 => 3
-  // // 3 % 4 = 3 then + 1 => 4
-  // // 4 % 4 = 0 then + 1 => 1 (and then at this point we start from the beginning)
-  // // In this case, the upcomingVideoIndex variable does not automatically updates itself because it is a regular constant, not tied to React's state system. It is only calculated onces when the component renders. However, when you click the mini video player, the handleMiniVideoClick function triggers a state update (setCurrentIndex), which causes the component to re-render. During this re-render, the upcomingVideoIndex is recalculated because it depends on the update value of currentIndex.
-  // const upcomingVideoIndex = (currentIndex % totalVideos) + 1;
 
   // useEffect hook used to check if the video has loaded. 
   // Whenever loadedVideo changes this useEffect is recall. And check if loaded video is equal to the total number of videos.
