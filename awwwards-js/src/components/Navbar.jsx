@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import Button from './Button';
 import { TiLocationArrow } from 'react-icons/ti';
 import { useWindowScroll } from 'react-use'; // https://github.com/streamich/react-use
-import { use } from 'react';
+import { gsap } from 'gsap';
 
 // Defining out Nav Items that we will then map through and display in the Right side of the Nav bar. 
 const navItems = ['Nexus', 'Vault', 'Prologue', 'About', 'Contact'];
@@ -36,9 +36,31 @@ const Navbar = () => {
     // This is the topmost position and there we want to show the nav bar without the floating element.
     if (currentScrollY === 0) {
       setIsNavVisible(true);
-      navContainerRef
+      // We can remove a specific class based on the position of the scroll. 
+      navContainerRef.current.classList.remove('floating-nav');
+    } else if (currentScrollY > lastScrollY) { // If currentScrollY > lastScrollY it means that the user is scrolling down. 
+      // In this case we can completely hide the navigation bar. And we can add the floating-nav class.
+      setIsNavVisible(false);
+      navContainerRef.current.classList.add('floating-nav');
+    } else if (currentScrollY < lastScrollY) { // Means that the user is scrolling up. It is "lost" and we want to show again the navigation bar.
+      setIsNavVisible(true);
+      // Adding the floating Nav.
+      navContainerRef.current.classList.add('floating-nav');
     }
-  }, [currentScrollY]);
+
+    // Keep track of the last scroll Y
+    setLastScrollY(currentScrollY);
+
+  }, [currentScrollY, lastScrollY]);
+
+  // We can also apply some slight GSAP animation, which is going to change whenever the NavBar visibility changes. 
+  useEffect(() => {
+    gsap.to(navContainerRef.current, {
+      y: isNavVisible ? 0 : -100,
+      opacity: isNavVisible ? 1 : 0,
+      duration: 0.2,
+    })
+  }, [isNavVisible]);
 
   // Create a new function that will allow to play the music when the button is clicked. 
   const toggleAudioIndicator = () => {
@@ -113,19 +135,19 @@ const Navbar = () => {
                 src='/audio/loop.mp3'
                 loop // Loop the audio when it finishes to play.
               />
-                {/* While the audio is playing we also want to show some audio lines that move up and down to indicate that the audio is playing */}
-                {/* In order to achieve that we can map over an array */}
-                {[1, 2, 3, 4].map((bar) => (
-                  // For each bar we will return a div.
-                  <div
-                    key={bar}
-                    className={`indicator-line ${isIndicatorActive ?
-                        'active' :
-                        ''
-                      }`} 
-                    style={{animationDelay: `${bar * 0.1}s`}} // The value of bar is multiplied by 0.1 to calculate the animation delay. I.e. If the bar is 1, the delay is 0.1s. If the bar is 2 the delay is 0.2s.
-                  />
-                ))}
+              {/* While the audio is playing we also want to show some audio lines that move up and down to indicate that the audio is playing */}
+              {/* In order to achieve that we can map over an array */}
+              {[1, 2, 3, 4].map((bar) => (
+                // For each bar we will return a div.
+                <div
+                  key={bar}
+                  className={`indicator-line ${isIndicatorActive ?
+                    'active' :
+                    ''
+                    }`}
+                  style={{ animationDelay: `${bar * 0.1}s` }} // The value of bar is multiplied by 0.1 to calculate the animation delay. I.e. If the bar is 1, the delay is 0.1s. If the bar is 2 the delay is 0.2s.
+                />
+              ))}
             </button>
           </div>
         </nav>
