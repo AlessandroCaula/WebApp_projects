@@ -94,7 +94,13 @@ const Features = () => {
           </div>
 
           <div className='bento-tilt_2'>
-
+            <video 
+              src='videos/feature-5.mp4'
+              loop
+              muted
+              autoPlay
+              className='size-full object-cover object-center'
+            />
           </div>
 
           {/* <div className='border border-blue-500'></div>
