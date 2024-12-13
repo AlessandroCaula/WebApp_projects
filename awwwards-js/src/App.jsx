@@ -1,6 +1,7 @@
 import Hero from "./components/Hero";
 import About from "./components/About";
 import Navbar from "./components/Navbar";
+import Features from "./components/Features";
 
 const App = () => {
   return (
@@ -12,10 +13,14 @@ const App = () => {
       {/* Navigation Bar */}
       <Navbar />
 
-      {/* The HERO section of a Webpage refers to the prominent, introductory area area typically placed at the top of the page.  */}
+      {/* The HERO section of a Webpage refers to the prominent, introductory area area typically placed at the top of the page */}
       <Hero />
       
+      {/* Rendering the About section component */}
       <About />
+
+      {/* Rendering the Feature section component */}
+      <Features />
 
     </main>
   )
