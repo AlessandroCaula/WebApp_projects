@@ -1,6 +1,19 @@
 import React from 'react'
 import { TiLocationArrow } from 'react-icons/ti'
 
+// Adding the tilt effect to the BentoCards, when hover over the cards, they will move (tilt) like if they you are interacting with them.
+// For this purpose we are gonna create a new BentoTilt component.
+// We are then gonna wrap each of the BentoCard in the BentoTilt component, instead of the <div> element. 
+// The children in this way will be the BentoCard.
+// In React, the children prop is a special prop automatically passed to components. It represents any elements or components nested inside the opening and closing tags of that component. 
+const BentoTilt = ({ children, className = '' }) => {
+ return (
+  <div className={className}>
+    {children}
+  </div>
+ ) 
+}
+
 // Here we can create the BentoCard component, since we will not use it anywhere if not in this class.
 const BentoCard = ({ src, title, description, isComingSoon }) => {
   return (
@@ -41,7 +54,7 @@ const Features = () => {
           </p>
         </div>
         {/* Start of our Bento grid */}
-        <div className='border-hsla relative mb-7 h-96 w-full overflow-hidden rounded-md md:h-[65vh]'> {/* border-hsla => custom class, which only gives the white color to the property */}
+        <BentoTilt className='border-hsla relative mb-7 h-96 w-full overflow-hidden rounded-md md:h-[65vh]'> {/* border-hsla => custom class, which only gives the white color to the property */}
           {/* Withing this div, we want to render different Bento cards */}
           <BentoCard
             src="videos/feature-1.mp4" // The source of the video we want to play in the BentoCard
@@ -49,7 +62,7 @@ const Features = () => {
             description="A cross-platform metagame app, turning your activities across Web2 and Web3 games into a rewarding adventure."
             isComingSoon // By default, if we don't specify the value of this property, it is set to True.
           />
-        </div>
+        </BentoTilt>
 
         {/* vh-[153vh] => Sets the height of the element to 135vh (vh stands for the "viewport height") */}
         {/* grid-cols-2 => Defines the number of columns in the grid. Creates a grid with 2 column``s. Each column will take up an equal amount of space by default unless otherwise specified. */}
@@ -58,31 +71,31 @@ const Features = () => {
         <div className='grid h-[135vh] grid-cols-2 grid-rows-3 gap-7'> {/* border border-red-500 */}
           {/* row-span-1 => Defines how many rows this element should span within the grid layout. The element will occupy 1 row in the grid. */}
           {/* md:col-span-1 => md: a responsive breakpoint that applies the style starting at the md (medium) screen size, typically 768px or larger. On medium-sized screens and larger, the element will span 1 column. */}
-          <div className='bento-tilt_1 row-span-1 md:col-span-1 md:row-span-2'>
+          <BentoTilt className='bento-tilt_1 row-span-1 md:col-span-1 md:row-span-2'>
             {/* Visualize another BentoCard component inside this cell of the grid. Passing the right props. */}
-            <BentoCard 
+            <BentoCard
               src="videos/feature-2.mp4"
               // The empty react fragment <></> serves as a lightweight wrapper that allows you to group multiple elements without adding an extra node to the DOM. 
               title={<>zig<b>m</b>a</>}
               description="An anime gaming-inspired NFT collection - the IP primed for expansion."
             />
-          </div>
+          </BentoTilt>
 
-          <div className='bento-tilt_1 row-span-1 ms-32 md:col-span-1 md:ms-0'>
-            <BentoCard 
+          <BentoTilt className='bento-tilt_1 row-span-1 ms-32 md:col-span-1 md:ms-0'>
+            <BentoCard
               src="videos/feature-3.mp4"
               title={<>n<b>e</b>xus</>}
               description="A gamified social hub, adding a new dimension of play to social interaction for Web3 communities."
             />
-          </div>
+          </BentoTilt>
 
-          <div className='bento-tilt_1 me-14 md:col-span-1 md:me-0'>
-            <BentoCard 
+          <BentoTilt className='bento-tilt_1 me-14 md:col-span-1 md:me-0'>
+            <BentoCard
               src="videos/feature-4.mp4"
               title={<>az<b>u</b>l</>}
               description="A cross-world Ai Agent - elevating your gameplay to be more fun and productive."
             />
-          </div>
+          </BentoTilt>
 
           <div className='bento-tilt_2'>
             <div className='flex size-full flex-col justify-between bg-violet-300 p-5'>
@@ -94,7 +107,7 @@ const Features = () => {
           </div>
 
           <div className='bento-tilt_2'>
-            <video 
+            <video
               src='videos/feature-5.mp4'
               loop
               muted
@@ -102,11 +115,6 @@ const Features = () => {
               className='size-full object-cover object-center'
             />
           </div>
-
-          {/* <div className='border border-blue-500'></div>
-          <div className='border border-green-500'></div>
-          <div className='border border-violet-500'></div>
-          <div className='border border-yellow-500'></div> */}
         </div>
 
       </div>
