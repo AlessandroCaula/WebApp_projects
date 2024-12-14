@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef, useState } from 'react'
 import { TiLocationArrow } from 'react-icons/ti'
 
 // Adding the tilt effect to the BentoCards, when hover over the cards, they will move (tilt) like if they you are interacting with them.
@@ -6,8 +6,24 @@ import { TiLocationArrow } from 'react-icons/ti'
 // We are then gonna wrap each of the BentoCard in the BentoTilt component, instead of the <div> element. 
 // The children in this way will be the BentoCard.
 // In React, the children prop is a special prop automatically passed to components. It represents any elements or components nested inside the opening and closing tags of that component. 
+// In our case, the BentoCard is passed as the children prop to the BentoTilt component. 
 const BentoTilt = ({ children, className = '' }) => {
- return (
+  // Implement the tilt itself.
+  // useState variable
+  useState [transformStyle, setTransformStyle] = useState('');
+
+  // We also need a ref in order to be able to move those elements around
+  // useRef is a React Hook that provides a way to directly access and manipulate DOM elements or persist value across renders without causing re-renders.
+  const itemRef = useRef();
+  // Function used to handle mouse move, which will give us the move event. And it will be executed once we move our mouse on top of that element.
+  const handleMouseMove = (e) => { }
+  //  And we will have the same thing for handle mouse leave, which will happen once we leave the card
+  const handleMouseLeave = (e) => {
+    // This is when we want to set the transformStyle back to an empty string. 
+    setTransformStyle('');
+  }
+
+  return (
   <div className={className}>
     {children}
   </div>
