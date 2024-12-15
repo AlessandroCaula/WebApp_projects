@@ -16,21 +16,35 @@ const BentoTilt = ({ children, className = '' }) => {
   // useRef is a React Hook that provides a way to directly access and manipulate DOM elements or persist value across renders without causing re-renders.
   const itemRef = useRef();
   // Function used to handle mouse move, which will give us the move event. And it will be executed once we move our mouse on top of that element.
+  // This function creates a 3D tilt effect for a card when the mouse over it. 
   const handleMouseMove = (event) => {
     // When the mouse goes over a Card, we want first to figure out which card we are interacting with. 
     // If there is no card, we want to exit the function without modifying anything. 
+    // itemRef is a reference to the card DOM element. The current property points to the DOM node. If the card doesn't exist or the reference is null, the function exits to avoid errors.
     if (!itemRef.current) return;
     // Get the properties of the position of the card. By destructuring the left, top, width and the height of the card. Using the getBoundingClientRect method.
     const { left, top, width, height } = itemRef.current.getBoundingClientRect();
     // Get the relative X and Y position of the mouse relative to the card. The event.clientX is the position of the mouse.
-    const relativeX = (event.clientX - left) / width;
-    const relativeY = (event.clientY - top) / height;
+    // event.clientX and event.clientY provide the mouse's current position on the screed.
+    // Subtracting left and top gives the position of the mouse relative to the card. Dividing by width and height normalizes the position to a range of [0, 1].
+    const relativeX = (event.clientX - left) / width; // Horizontal mouse position within the card.
+    const relativeY = (event.clientY - top) / height; // Vertical mouse position within the card.
+    
+    // Calculate the tilt angles.
     // Now that we have the relative position of the mouse on the Card. We can do the same for the tilt.
-    const tiltX = (relativeY - 0.5) * 5;
-    const tiltY = (relativeX - 0.5) * -5;
+    // Subtract 0.5 to center the range around 0 (from [-0.5, 0.5]). Multiply by 20 to define the maximum tilt angles in degree.
+    const tiltX = (relativeY - 0.5) * 5; // Vertical tilt, affected by the vertical mouse position.
+    const tiltY = (relativeX - 0.5) * -5; // Horizontal tilt, affected by the horizontal mouse position.
+    
     // Setting the new transformation.
+    // perspective(700px) => Adds depth to the 3D effect.
+    // rotate(${tiltX}deg) => Tilts the card up/down based on the vertical.
+    // rotate(${tiltY}deg) => Tilts the card left/right based on the horizontal position. 
+    // scale3d(0.95, 0.95, 0.95) => Shrink the card slightly for a subtle zoom effect.
     const newTransform = `perspective(700px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale3d(.95, .95, .95)`;
-    // But if we are modifying something we can then set the new transform.
+
+    // Apply the transformation.
+    // Updates the CSS transform style of the card using the calculated newTransform. The setTransformStyle is a useState function that dynamically updates the card's style. 
     setTransformStyle(newTransform);
   };
   //  And we will have the same thing for handle mouse leave, which will happen once we leave the card
