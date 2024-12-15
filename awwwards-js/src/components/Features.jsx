@@ -10,25 +10,48 @@ import { TiLocationArrow } from 'react-icons/ti'
 const BentoTilt = ({ children, className = '' }) => {
   // Implement the tilt itself.
   // useState variable
-  useState [transformStyle, setTransformStyle] = useState('');
+  const [transformStyle, setTransformStyle] = useState('');
 
   // We also need a ref in order to be able to move those elements around
   // useRef is a React Hook that provides a way to directly access and manipulate DOM elements or persist value across renders without causing re-renders.
   const itemRef = useRef();
   // Function used to handle mouse move, which will give us the move event. And it will be executed once we move our mouse on top of that element.
-  const handleMouseMove = (e) => { }
+  const handleMouseMove = (event) => {
+    // When the mouse goes over a Card, we want first to figure out which card we are interacting with. 
+    // If there is no card, we want to exit the function without modifying anything. 
+    if (!itemRef.current) return;
+    // Get the properties of the position of the card. By destructuring the left, top, width and the height of the card. Using the getBoundingClientRect method.
+    const { left, top, width, height } = itemRef.current.getBoundingClientRect();
+    // Get the relative X and Y position of the mouse relative to the card. The event.clientX is the position of the mouse.
+    const relativeX = (event.clientX - left) / width;
+    const relativeY = (event.clientY - top) / height;
+    // Now that we have the relative position of the mouse on the Card. We can do the same for the tilt.
+    const tiltX = (relativeY - 0.5) * 5;
+    const tiltY = (relativeX - 0.5) * -5;
+    // Setting the new transformation.
+    const newTransform = `perspective(700px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale3d(.95, .95, .95)`;
+    // But if we are modifying something we can then set the new transform.
+    setTransformStyle(newTransform);
+  };
   //  And we will have the same thing for handle mouse leave, which will happen once we leave the card
-  const handleMouseLeave = (e) => {
+  const handleMouseLeave = () => {
     // This is when we want to set the transformStyle back to an empty string. 
     setTransformStyle('');
-  }
+  };
 
   return (
-  <div className={className}>
-    {children}
-  </div>
- ) 
-}
+    // Pass all the function and the element to this <div>. So for example, it is a nice practice as will have our handler function (handleMouseMove) attached to the specific on event (onMouseMove) functionality.
+    <div 
+      className={className} 
+      ref={itemRef} 
+      onMouseMove={handleMouseMove} 
+      onMouseLeave={handleMouseLeave}
+      style={{ transform: transformStyle }}
+    >
+      {children}
+    </div>
+  );
+};
 
 // Here we can create the BentoCard component, since we will not use it anywhere if not in this class.
 const BentoCard = ({ src, title, description, isComingSoon }) => {
