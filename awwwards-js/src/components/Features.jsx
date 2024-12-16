@@ -41,7 +41,7 @@ const BentoTilt = ({ children, className = '' }) => {
     // rotate(${tiltX}deg) => Tilts the card up/down based on the vertical.
     // rotate(${tiltY}deg) => Tilts the card left/right based on the horizontal position. 
     // scale3d(0.95, 0.95, 0.95) => Shrink the card slightly for a subtle zoom effect.
-    const newTransform = `perspective(700px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale3d(.95, .95, .95)`;
+    const newTransform = `perspective(700px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale3d(.98, .98, .98)`;
 
     // Apply the transformation.
     // Updates the CSS transform style of the card using the calculated newTransform. The setTransformStyle is a useState function that dynamically updates the card's style. 
