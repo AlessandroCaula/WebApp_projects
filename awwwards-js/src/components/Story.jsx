@@ -1,4 +1,4 @@
-import React from 'react'
+import AnimatedTitle from "./AnimatedTitle"
 
 const Story = () => {
   return (
@@ -8,7 +8,16 @@ const Story = () => {
     >
       {/* flex-col => The element will appear, one below the other. */}
       <div className='flex size-full flex-col items-center py-10 pb-24'>
-
+        <p className='font-general text-sm uppercase md:text-[10px]'>
+          The multiversal ip world
+        </p>
+        {/* Create the animated title */}
+        <div className='relative size-full'>
+          <AnimatedTitle 
+            title="The st<b>o</b>ry of <br /> a hidden real<b>m</b>"
+            sectionId=""
+          />
+        </div>
       </div>
     </section>
   )
