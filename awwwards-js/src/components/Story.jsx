@@ -2,6 +2,7 @@ import { useRef } from "react"
 import AnimatedTitle from "./AnimatedTitle"
 import gsap from "gsap";
 import RoundedCorners from "./RoundedCorners";
+import Button from "./Button"
 
 const Story = () => {
 
@@ -101,9 +102,18 @@ const Story = () => {
         {/* Adding the text and the bottom at the end of this section */}
         {/* -mt-80 => the negative sign indicates that the margin will be applied in the opposite direction, effectively pulling the element closer to its parent or sibling element. */}
         {/* md:-mt-64 => on medium and larger devices, sets the top margin to -16rem. me => margin-end */}
-        <div className="-mt-80 w-full justify-center md:-mt-64 md:me-44 md:justify-end">
-          <div>
-            
+        <div className="-mt-80 flex w-full justify-center md:-mt-64 md:me-44 md:justify-end">
+          {/* Add another <div> that will be the container of the text */}
+          <div className="flex h-full w-fit flex-col items-center md:items-start">
+            {/* Rendering the text within the <p> tag */}
+            <p className="mt-3 max-w-sm text-center font-circular-web text-violet-50 md:text-start">Where realms converge, lies Zentry and the boundles pillar. Discover its secrets and shape your fate amidst infinite opportunities </p>
+
+            {/* Adding the Button reusable component */}
+            <Button 
+              id="realm-button"
+              title="discover prologue"
+              containerClass="mt-5"
+            />
           </div>
         </div>
       </div>
