@@ -93,8 +93,16 @@ const Story = () => {
                 />
               </div>
             </div>
-
+            {/* Component used to apply a SVG filter on the current image. */}
             <RoundedCorners />
+            
+          </div>
+        </div>
+        {/* Adding the text and the bottom at the end of this section */}
+        {/* -mt-80 => the negative sign indicates that the margin will be applied in the opposite direction, effectively pulling the element closer to its parent or sibling element. */}
+        {/* md:-mt-64 => on medium and larger devices, sets the top margin to -16rem. me => margin-end */}
+        <div className="-mt-80 w-full justify-center md:-mt-64 md:me-44 md:justify-end">
+          <div>
             
           </div>
         </div>
