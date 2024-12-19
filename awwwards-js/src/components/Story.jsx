@@ -67,7 +67,7 @@ const Story = () => {
         {/* Create the animated title */}
         <div className='relative size-full'>
           <AnimatedTitle
-            title="The st<b>o</b>ry of <br /> a hidden real<b>m</b>"
+            title="the st<b>o</b>ry of <br /> a hidden real<b>m</b>"
             // Give a section ID so we can scroll to it. 
             sectionId="#story"
             containerClass="mt-5 pointer-events-none mix-blend-difference relative z-10"
@@ -89,16 +89,18 @@ const Story = () => {
                   // The alt tag is an attribute used in the <img> HTML tah to provide a textual description of an image. 
                   // 1. The alt text is read by screen readers to describe the image for visually impaired users. 
                   // 2. If an image fails to load, the alt text is displayed in its place.
-                  alt="entrance"
+                  alt="entrance.webp"
                   className="object-contain"
                 />
               </div>
             </div>
+
             {/* Component used to apply a SVG filter on the current image. */}
             <RoundedCorners />
             
           </div>
         </div>
+        
         {/* Adding the text and the bottom at the end of this section */}
         {/* -mt-80 => the negative sign indicates that the margin will be applied in the opposite direction, effectively pulling the element closer to its parent or sibling element. */}
         {/* md:-mt-64 => on medium and larger devices, sets the top margin to -16rem. me => margin-end */}
@@ -106,11 +108,12 @@ const Story = () => {
           {/* Add another <div> that will be the container of the text */}
           <div className="flex h-full w-fit flex-col items-center md:items-start">
             {/* Rendering the text within the <p> tag */}
-            <p className="mt-3 max-w-sm text-center font-circular-web text-violet-50 md:text-start">Where realms converge, lies Zentry and the boundles pillar. Discover its secrets and shape your fate amidst infinite opportunities </p>
-
+            <p className="mt-3 max-w-sm text-center font-circular-web text-violet-50 md:text-start">
+              Where realms converge, lies Zentry and the boundles pillar. Discover its secrets and shape your fate amidst infinite opportunities 
+            </p>
             {/* Adding the Button reusable component */}
             <Button 
-              id="realm-button"
+              id="realm-btn"
               title="discover prologue"
               containerClass="mt-5"
             />
