@@ -58,7 +58,7 @@ const Hero = () => {
     // 2 % 4 = 2 then + 1 => 3
     // 3 % 4 = 3 then + 1 => 4
     // 4 % 4 = 0 then + 1 => 1
-    setCurrentIndex((prevIndex) => (prevIndex % totalVideos + 1)); // upcomingVideoIndex
+    setCurrentIndex((prevIndex) => (prevIndex % totalVideos) + 1); // upcomingVideoIndex
   }
 
   // In order to animate the page, we will take advantage and use the GSAP (https://gsap.com/) which is a widely used and robust JavaScript animation library.
@@ -95,13 +95,13 @@ const Hero = () => {
         transformOrigin: 'center center', // Animation starts from the center. 
         scale: 0, // Starts scaled down to 0 (invisible) and scales up.
         duration: 1.5, // Lasts 1.5 seconds for a smoother effect.
-        ease: 'power1.inOut' // Uses a similar easing function as #next-video
+        ease: 'power1.inOut', // Uses a similar easing function as #next-video
       });
     }
   }, {
     // The code will be executed every time the currentIndex value changes. RevertOnUpdate: automatically undoes the current animation before applying a new one, ensure smooth transitions. 
     dependencies: [currentIndex],
-    revertOnUpdate: true
+    revertOnUpdate: true,
   }
   );
 
