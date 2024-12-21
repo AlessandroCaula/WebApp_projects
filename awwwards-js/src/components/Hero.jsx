@@ -4,6 +4,7 @@ import { TiLocationArrow } from "react-icons/ti";
 import { useGSAP } from "@gsap/react";
 import gsap from 'gsap';
 import { ScrollTrigger } from "gsap/all";
+import VideoPreview from "./VideoPreview";
 
 // gsap scrollTrigger is a plugin that we have to enable it here at the top to be able to use it. 
 gsap.registerPlugin(ScrollTrigger);
@@ -154,33 +155,37 @@ const Hero = () => {
       )}
       {/* Creating a div which will contain the video of the initial screen */}
       {/* z-10 => So that this video will appear above other content */}
-      <div 
-        id="video-frame" 
+      <div
+        id="video-frame"
         className="relative z-10 h-dvh w-screen overflow-hidden rounded-lg bg-blue-75"
-        >
+      >
         <div>
           {/* mask-clip-path => our special css class name */}
           <div className="mask-clip-path absolute-center absolute z-50 size-64 cursor-pointer overflow-hidden rounded-lg"> {/* border border-green-700 */}
-            {/* Creating another div, which will actually be a mini video player. */}
-            <div 
-              onClick={handleMiniVideoClick} 
-              className="origin-center scale-50 opacity-0 transition-all duration-500 ease-in hover:scale-100 hover:opacity-100"
-            >
-              {/* Implement the video player as a HTML self-closing video tag */}
-              {/* This video player will have the zoom effect. */}
-              <video
-                ref={nextVideoRef}
-                src={getVideoSrc((currentIndex % totalVideos) + 1)}
-                loop
-                muted
-                id='current-video'
-                // scale-150 => utility class used to apply a scale transformation to an element, increasing or decreasing its size relative to its original size. It scales the element 150% of its original size.
-                className="size-64 origin-center scale-150 object-cover object-center"
-                // onLoadedData => is a special function that is called when the data is loaded.
-                onLoadedData={handleVideoLoad}
-              />
-            </div>
+            {/* The Video Preview component will apply the classes to this miniPlayer, so that the video preview will skew based on where the mouse is hovering it. */}
+            <VideoPreview>
+              {/* Creating another div, which will actually be a mini video player. */}
+              <div
+                onClick={handleMiniVideoClick}
+                className="origin-center scale-50 opacity-0 transition-all duration-500 ease-in hover:scale-100 hover:opacity-100"
+              >
+                {/* Implement the video player as a HTML self-closing video tag */}
+                {/* This video player will have the zoom effect. */}
+                <video
+                  ref={nextVideoRef}
+                  src={getVideoSrc((currentIndex % totalVideos) + 1)}
+                  loop
+                  muted
+                  id='current-video'
+                  // scale-150 => utility class used to apply a scale transformation to an element, increasing or decreasing its size relative to its original size. It scales the element 150% of its original size.
+                  className="size-64 origin-center scale-150 object-cover object-center"
+                  // onLoadedData => is a special function that is called when the data is loaded.
+                  onLoadedData={handleVideoLoad}
+                />
+              </div>
+            </VideoPreview>
           </div>
+
           {/* Create another video component, which will be the primary video on the background */}
           <video
             ref={nextVideoRef}
@@ -198,7 +203,7 @@ const Hero = () => {
             src={getVideoSrc(
               currentIndex === totalVideos - 1 ? 1 : currentIndex
             )}
-            // autoPlay // This allows the video to loop and play. 
+            autoPlay // This allows the video to loop and play. 
             loop
             muted
             className="absolute left-0 top-0 size-full object-cover object-center"
