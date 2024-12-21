@@ -111,7 +111,7 @@ const Features = () => {
           {/* Withing this div, we want to render different Bento cards */}
           <BentoCard
             src="videos/feature-1.mp4" // The source of the video we want to play in the BentoCard
-            title={<>rad<b>n</b>t</>}
+            title={<>radia<b>n</b>t</>}
             description="A cross-platform metagame app, turning your activities across Web2 and Web3 games into a rewarding adventure."
             isComingSoon // By default, if we don't specify the value of this property, it is set to True.
           />
