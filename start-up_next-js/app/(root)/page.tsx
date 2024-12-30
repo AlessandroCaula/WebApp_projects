@@ -1,4 +1,4 @@
-import Hello from "./components/hello";
+import Hello from "../components/hello";
 
 export default function Home() {
   // Check if this component is rendered on the server or on the client.

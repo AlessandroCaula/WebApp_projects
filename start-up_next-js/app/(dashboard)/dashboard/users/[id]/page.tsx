@@ -6,8 +6,9 @@ const page = ({ params }: { params: { id: string } }) => {
   const { id } = params;
 
   return (
-  <h1 className="text-3xl">User Profile: {id}</h1>
-  )
+    // Rendering the h1 text with the id that comes directly from the params when the user clicks on a certain user in the user page.
+    <h1 className="text-3xl">User Profile: {id}</h1>
+  );
 };
 
 export default page;
