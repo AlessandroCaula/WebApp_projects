@@ -23,9 +23,14 @@ const Navbar = async () => {
                 <span>Create</span>
               </Link>
 
-              <button onClick={signOut}>
-                <span>Logout</span>
-              </button>
+              <form action={async () => {
+                "use server";
+                await signOut({ redirectTo: "/" });
+              }}>
+                <button type="submit">
+                  Logout
+                </button>
+              </form>
 
               {/* One more link that will point to the user profile */}
               <Link href={`/user/${session?.id}`}>
@@ -38,7 +43,7 @@ const Navbar = async () => {
             <form action={async () => {
               // Adding the "use server" directive. which will ensure that this will be called on the server.
               "use server";
-              await signIn('github')
+              await signIn('github');
             }}>
               <button type="submit">
                 Login
