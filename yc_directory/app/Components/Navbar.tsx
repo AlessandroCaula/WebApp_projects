@@ -25,6 +25,7 @@ const Navbar = async () => {
 
               <form action={async () => {
                 "use server";
+                // After logOut we redirect the user to the home page.
                 await signOut({ redirectTo: "/" });
               }}>
                 <button type="submit">
