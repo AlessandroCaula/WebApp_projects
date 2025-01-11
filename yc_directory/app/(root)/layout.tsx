@@ -1,6 +1,6 @@
 // Everything that we will apply to this layout, is going to be applied only on the pages within this route group.
 
-import Navbar from "../Components/Navbar";
+import Navbar from "../../components/Navbar";
 
 export default function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
     return (
