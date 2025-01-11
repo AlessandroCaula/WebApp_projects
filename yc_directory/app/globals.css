@@ -10,7 +10,6 @@
     }
 }
 
-/* Create some custom class component, that will be reused different times in different places in the application. The style will be defined in here and applied to the sections (element tags) that we will be style by calling the i.e. "heading" class.*/
 @layer utilities {
     .flex-between {
         @apply flex justify-between items-center;
