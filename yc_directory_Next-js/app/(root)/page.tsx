@@ -7,7 +7,7 @@ export default async function Home({ searchParams }: {
 
   const query = (await searchParams).query;
 
-  return (
+  return ( 
     <>
       {/* The pink_container is defined in the global.css file. */}
       <section className="pink_container">
