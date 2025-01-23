@@ -8,7 +8,6 @@ const config: Config = {
         "./app/**/*.{js,ts,jsx,tsx,mdx}",
         "./sanity/**/*.{js,ts,jsx,tsx,mdx}",
     ],
-    // Here is how theming in Tailwind works. You extend the themes to provide specific variables that I can use later on in the code.
     theme: {
         extend: {
             screens: {

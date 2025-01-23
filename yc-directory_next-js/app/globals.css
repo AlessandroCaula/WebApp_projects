@@ -9,7 +9,7 @@
         --radius: 0.5rem;
     }
 }
- /* These are some custom utility classes. These are defined in here and can be used all over our code in order to tailwind style every element that call these classes. In the tailwind style of a specific element you can just call one of these classes (i.e. .profile_title) and  all the styles defined in this class in here, will be automatically applied to the element. */
+
 @layer utilities {
     .flex-between {
         @apply flex justify-between items-center;
