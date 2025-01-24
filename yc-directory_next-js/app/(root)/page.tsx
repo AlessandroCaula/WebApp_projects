@@ -1,7 +1,12 @@
 import Image from "next/image";
 import SearchForm from "../components/SearchForm";
 
-export default function Home() {
+// Access the query from the search parameter to the prop. On every single nextJS page you have access to the search params
+export default async function Home({ searchParams }: { searchParams: Promise<{ query?: string }>}) {
+  
+  // Extract the query
+  const query = (await searchParams).query;
+
   return (
     <>
       <section className="pink_container">
@@ -12,7 +17,8 @@ export default function Home() {
         </p>
 
         {/* Add the input field functional component */}
-        <SearchForm />
+        {/* Pass the query to the search form */}
+        <SearchForm query={query}/>
       </section>
     </>
   );

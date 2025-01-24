@@ -5,9 +5,7 @@
 import Form from "next/form";
 import SearchFormReset from "./SearchFormReset";
 
-const SearchForm = () => {
-  // Define a fake query
-  const query = "Test";
+const SearchForm = ({ query }: { query?: string }) => {
 
   return (
     <Form action="/" scroll={false} className="search-form">
@@ -23,6 +21,10 @@ const SearchForm = () => {
         {/* If we have an active query we want to render a button that would allow us to reset it */}
         {/* !! Even if the form itself will be a serve side component the button and the onClick are still client side, so we have to extract it into a new component and simply render it here. */}
         {query && <SearchFormReset />}
+
+        <button type="submit" className="search-btn text-white">
+          S
+        </button>
       </div>
     </Form>
   );
