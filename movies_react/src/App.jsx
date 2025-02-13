@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Search from './components/Search'
 import Spinner from './components/Spinner';
+import MovieCard from './components/MovieCard';
 
 // API - Application Programming Interface:
 //  - A set of rules that allows one software application to talk to another.
@@ -129,7 +130,9 @@ const App = () => {
               {/* If after the => you put the {} you then have to return(element) something, while you can use the immediate return by using directly => () */}
               {moviesList.map((movie) => (
                 // Provide a key to each one of the elements. This is needed especially if you're deleting some of these elements from the list, cause react might "confuse" the two elements together and not be sure of what to render. 
-                <p key={movie.id} className='text-white'>{movie.title}</p>
+                
+                // Render the movie card. Give it the movie.id as key and passing the movie as the prop to the component. 
+                <MovieCard key={movie.id} movie={movie} />
               ))}
             </ul>
           )}
