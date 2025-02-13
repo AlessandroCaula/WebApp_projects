@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Search from './components/Search'
+import Spinner from './components/Spinner';
 
 // API - Application Programming Interface:
 //  - A set of rules that allows one software application to talk to another.
@@ -67,7 +68,7 @@ const App = () => {
         return;
       }
       // If everything went smooth, and you succeed set the movieList and populate it with all the movie data. 
-      setMoviesList(data.results || []); 
+      setMoviesList(data.results || []);
 
       // // To check if the data has been correctly fetched. 
       // alert('Data Fetching Completed');
@@ -109,15 +110,17 @@ const App = () => {
 
         {/* Section about movies */}
         <section className='all-movies'>
-          <h2>All Movies</h2>
-          
+
+          <h2 className='mt-[40px]'>All Movies</h2>
+
           {/* Conditional rendering */}
           {/* First check if we are currently loading. And open up a ternary operator */}
           {/* If we are not loading, check if an error message exist */}
           {/* If we are not loading and there is no error message, then show an unordered list. */}
           {isLoading ? (
-            // Showing if it is loading
-            <p className='text-white'>Loading...</p>
+            // Showing if it is loading the Spinner component
+            <Spinner />
+            // <p className='text-white'>Loading...</p>
           ) : errorMessage ? (
             <p className='text-red-500'>{errorMessage}</p>
           ) : (
