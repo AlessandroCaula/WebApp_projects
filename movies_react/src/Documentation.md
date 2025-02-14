@@ -5,3 +5,4 @@
 - List of Open APIs: https://github.com/public-apis/public-apis
 - Movie DataBase API: https://developer.themoviedb.org/docs/getting-started
 - Free components (like spinner loading): https://flowbite.com/
+- npm react-use (for installing hooks, like the useDebounce): https://www.npmjs.com/package/react-use
