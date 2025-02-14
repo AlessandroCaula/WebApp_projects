@@ -36,7 +36,8 @@ const App = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   // Defining the function used to fetch those movies. Which will an async function. 
-  const fetchMovies = async () => {
+  // The fetchMovies will accept the a query, that will be the film searched by the user, otherwise an empty string.
+  const fetchMovies = async (query = '') => {
     // Turn on the loading
     setIsLoading(true);
     // Set the errorMessage to nothing, cause it does not exist yet.
@@ -45,8 +46,12 @@ const App = () => {
     // Open a try catch block if something fails when fetching the data 
     try {
       // Define the exact endpoint that we are trying to call. 
-      // That will be equal to a template string, where we put together the API base URL 
-      const endpoint = `${API_BASE_URL}/discover/movie?sort_by=popularity.desc`;
+      // That will be equal to a template string, where we put together the API base URL.
+      // Change the endpoint based on whether the user query is present or not. 
+      // The encodeURIComponent ensures that special character (such as spaces, punctuation, and other non-ASCII characters) are properly encoded so that they can be safety transmitted over the internet. 
+      const endpoint = query 
+        ? `${API_BASE_URL}/search/movie?query=${encodeURIComponent(query)}` 
+        : `${API_BASE_URL}/discover/movie?sort_by=popularity.desc`;
       // Once we have the endpoint we can try to call it.
       // The fetch() is a built in JavaScript function that allows you to make HTTP requests, like get or post to different apis or servers.
       const response = await fetch(endpoint, API_OPTIONS);
@@ -86,11 +91,12 @@ const App = () => {
     }
   }
 
-  // Create a useEffect hook for fetching the data. That will only load at the start, by using the empty dependency array [].
+  // Create a useEffect hook for fetching the data. That load at the start, and whenever the searchTerm is changed (cause the user input a film), recall the fetch data. Therefore add it to the dependency array
   useEffect(() => {
-    // Call the fetch movies function to fetch the data as first load of the application
-    fetchMovies();
-  }, [])
+    // Call the fetch movies function to fetch the data as first load of the application. 
+    // Passing the search term, that will be equal to the film searched by the user (when searched)
+    fetchMovies(searchTerm);
+  }, [searchTerm])
 
   return (
     <main>
@@ -130,7 +136,7 @@ const App = () => {
               {/* If after the => you put the {} you then have to return(element) something, while you can use the immediate return by using directly => () */}
               {moviesList.map((movie) => (
                 // Provide a key to each one of the elements. This is needed especially if you're deleting some of these elements from the list, cause react might "confuse" the two elements together and not be sure of what to render. 
-                
+
                 // Render the movie card. Give it the movie.id as key and passing the movie as the prop to the component. 
                 <MovieCard key={movie.id} movie={movie} />
               ))}
