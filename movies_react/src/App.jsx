@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Search from './components/Search'
 import Spinner from './components/Spinner';
 import MovieCard from './components/MovieCard';
+import { useDebounce } from 'react-use';
 
 // API - Application Programming Interface:
 //  - A set of rules that allows one software application to talk to another.
@@ -21,7 +22,6 @@ const API_OPTIONS = {
   }
 };
 
-
 // Main App function component.
 const App = () => {
 
@@ -34,6 +34,13 @@ const App = () => {
   // Defining the loading state variable. 
   // Because when you are fetching something from an API, it takes time, so while that data is loading, you want to show some kind of loader to the user.
   const [isLoading, setIsLoading] = useState(false);
+  // Creating a new useDebounce state (useDebounce) which will avoid to sent a request to the server for the film, each time that a letter is added into the search bar. 
+  // Debouncing is a powerful technique in JavaScript that helps manage the frequency of function executions, particularly in response to user events. By ensuring that a function is only called after a certain period of inactivity, debouncing enhances performance, improves user experience, and reduces server load. https://levelup.gitconnected.com/debounce-in-javascript-improve-your-applications-performance-5b01855e086
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
+
+  // Call the useDebounce hook. Pass a callback function to it, and call the setDebouncedSearchTerm, with the searchTerm that we have. 
+  // But we can pass a specific number of milliseconds, for how long it should wait before actually changing that value in the state.
+  useDebounce(() => setDebouncedSearchTerm(searchTerm), 500, [searchTerm]);
 
   // Defining the function used to fetch those movies. Which will an async function. 
   // The fetchMovies will accept the a query, that will be the film searched by the user, otherwise an empty string.
@@ -91,12 +98,12 @@ const App = () => {
     }
   }
 
-  // Create a useEffect hook for fetching the data. That load at the start, and whenever the searchTerm is changed (cause the user input a film), recall the fetch data. Therefore add it to the dependency array
+  // Create a useEffect hook for fetching the data. That load at the start, and whenever the debounced searchTerm is changed (cause the user input a film), recall the fetch data. Therefore add it to the dependency array.
   useEffect(() => {
     // Call the fetch movies function to fetch the data as first load of the application. 
     // Passing the search term, that will be equal to the film searched by the user (when searched)
-    fetchMovies(searchTerm);
-  }, [searchTerm])
+    fetchMovies(debouncedSearchTerm);
+  }, [debouncedSearchTerm])
 
   return (
     <main>
