@@ -28,18 +28,24 @@ const App = () => {
 
   // Create the Search film component
   const [searchTerm, setSearchTerm] = useState('');
-  // In order to display any fetching error in the browser, define a new useState variable
-  const [errorMessage, setErrorMessage] = useState('');
-  // Create the state in which we will store all the movies that have been fetched. An empty list will be the initial value.
-  const [moviesList, setMoviesList] = useState([]);
-  // Defining the loading state variable. 
-  // Because when you are fetching something from an API, it takes time, so while that data is loading, you want to show some kind of loader to the user.
-  const [isLoading, setIsLoading] = useState(false);
   // Creating a new useDebounce state (useDebounce) which will avoid to sent a request to the server for the film, each time that a letter is added into the search bar. 
   // Debouncing is a powerful technique in JavaScript that helps manage the frequency of function executions, particularly in response to user events. By ensuring that a function is only called after a certain period of inactivity, debouncing enhances performance, improves user experience, and reduces server load. https://levelup.gitconnected.com/debounce-in-javascript-improve-your-applications-performance-5b01855e086
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
+
+  // Create the state in which we will store all the movies that have been fetched. An empty list will be the initial value.
+  const [moviesList, setMoviesList] = useState([]);
+  // In order to display any fetching error in the browser, define a new useState variable
+  const [errorMessage, setErrorMessage] = useState('');
+  // Defining the loading state variable. 
+  // Because when you are fetching something from an API, it takes time, so while that data is loading, you want to show some kind of loader to the user.
+  const [isLoading, setIsLoading] = useState(false);
+
   // Create a state for the trending movies that will be visualized in the suggested movies.
   const [trendingMovies, setTrendingMovies] = useState([]);
+  // In order to display any fetching error from the appwrite database request, define a new useState variable
+  const [errorMessageTrending, setErrorMessageTrending] = useState('');
+  // Defining the loading state variable. 
+  const [isLoadingTrending, setIsLoadingTrending] = useState(false);
 
   // Call the useDebounce hook. Pass a callback function to it, and call the setDebouncedSearchTerm, with the searchTerm that we have. 
   // But we can pass a specific number of milliseconds, for how long it should wait before actually changing that value in the state.
@@ -111,11 +117,19 @@ const App = () => {
   const loadTrendingMovies = async () => {
     // Try and catch block
     try {
+      // Set the isLoadingTrending
+      setIsLoadingTrending(true);
+      // Retrieve the trending movie list
       const movies = await getTrendingMovies();
       // Set the trending movies once they have been fetched.
       setTrendingMovies(movies);
+
     } catch (error) {
-      console.error(`Error fetching trending movies ${error}`);
+      console.error(`Error fetching trending movies: ${error}`);
+      setErrorMessageTrending('Error fetching trending movies. Please try again later.')
+    } finally {
+      // Set the isLoadingTrending to false
+      setIsLoadingTrending(false);
     }
   }
 
@@ -153,17 +167,25 @@ const App = () => {
         {trendingMovies && (
           <section className='trending'>
             <h2>Trending Movies</h2>
-            {/* Render an unordered list and map over all the trending list to display them */}
-            <ul>
-              {trendingMovies.map((movie, index) => (
-                // Rendering the number (from 1 to 5) for each of the film. 
-                <li key={moveBy.$id}>
+
+            {/* Conditional rendering for spinner or error or trending list. */}
+            {isLoadingTrending ? (
+              // Show the spinner component if it is loading
+              <Spinner />
+            ) : errorMessageTrending ? (
+              <p className='text-red-500'>{errorMessageTrending}</p>
+            ) : (
+              <ul>
+                {/* Render an unordered list and map over all the trending list to display them */}
+                {trendingMovies.map((movie, index) => (
+                <li key={movie.$id}>
                   <p>{index + 1}</p>
                   {/* Render the image of the trending film */}
                   <img src={movie.poster_url} alt={movie.title} />
                 </li>
-              ))}
-            </ul>
+                ))}
+              </ul>
+            )}
           </section>
         )}
 
@@ -197,7 +219,7 @@ const App = () => {
           {/* {errorMessage && <p className='text-red-500'>{errorMessage}</p>} */}
         </section>
       </div>
-    </main>
+    </main >
   )
 }
 
