@@ -3,6 +3,7 @@ import Search from './components/Search'
 import Spinner from './components/Spinner';
 import MovieCard from './components/MovieCard';
 import { useDebounce } from 'react-use';
+import { updateSearchCount } from './appwrite';
 
 // API - Application Programming Interface:
 //  - A set of rules that allows one software application to talk to another.
@@ -40,7 +41,7 @@ const App = () => {
 
   // Call the useDebounce hook. Pass a callback function to it, and call the setDebouncedSearchTerm, with the searchTerm that we have. 
   // But we can pass a specific number of milliseconds, for how long it should wait before actually changing that value in the state.
-  useDebounce(() => setDebouncedSearchTerm(searchTerm), 500, [searchTerm]);
+  useDebounce(() => setDebouncedSearchTerm(searchTerm), 700, [searchTerm]);
 
   // Defining the function used to fetch those movies. Which will an async function. 
   // The fetchMovies will accept the a query, that will be the film searched by the user, otherwise an empty string.
@@ -82,6 +83,12 @@ const App = () => {
       }
       // If everything went smooth, and you succeed set the movieList and populate it with all the movie data. 
       setMoviesList(data.results || []);
+
+      // Call the updateSearchCount function. To update the search count for the specific movie, whenever a user searches for it. 
+      // Check first if the movie exists for that query.
+      if (query && data.results.length > 0) {
+        await updateSearchCount(query, data.results[0]);
+      }
 
       // // To check if the data has been correctly fetched. 
       // alert('Data Fetching Completed');
