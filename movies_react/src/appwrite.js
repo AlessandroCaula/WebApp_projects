@@ -42,3 +42,23 @@ export const updateSearchCount = async (searchTerm, movie) => {
     console.log(error);
   }
 };
+
+
+// Creating another appwrite function that will be used to fetch the data from the appwrite database and display the most searched movies in the recommended movie section. 
+export const getTrendingMovies = async () => {
+  // Open a try and catch block in case something goes wrong.
+  try {
+    // Try to fetch the movies. From which database (DATABASE_ID), which collection (COLLECTION_ID) and then provide an array to specify which movies we want to get.
+    const result = await database.listDocuments(DATABASE_ID, COLLECTION_ID, [
+      // Only ask for 5 movies 
+      Query.limit(5),
+      // Ask them in a descending order sorted by count.
+      Query.orderDesc("count")
+    ]);
+    // Return the result
+    return result.documents;
+    
+  } catch (error) {
+    console.log(error);
+  }
+}

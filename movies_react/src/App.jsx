@@ -3,7 +3,7 @@ import Search from './components/Search'
 import Spinner from './components/Spinner';
 import MovieCard from './components/MovieCard';
 import { useDebounce } from 'react-use';
-import { updateSearchCount } from './appwrite';
+import { getTrendingMovies, updateSearchCount } from './appwrite';
 
 // API - Application Programming Interface:
 //  - A set of rules that allows one software application to talk to another.
@@ -38,6 +38,8 @@ const App = () => {
   // Creating a new useDebounce state (useDebounce) which will avoid to sent a request to the server for the film, each time that a letter is added into the search bar. 
   // Debouncing is a powerful technique in JavaScript that helps manage the frequency of function executions, particularly in response to user events. By ensuring that a function is only called after a certain period of inactivity, debouncing enhances performance, improves user experience, and reduces server load. https://levelup.gitconnected.com/debounce-in-javascript-improve-your-applications-performance-5b01855e086
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
+  // Create a state for the trending movies that will be visualized in the suggested movies.
+  const [trendingMovies, setTrendingMovies] = useState([]);
 
   // Call the useDebounce hook. Pass a callback function to it, and call the setDebouncedSearchTerm, with the searchTerm that we have. 
   // But we can pass a specific number of milliseconds, for how long it should wait before actually changing that value in the state.
@@ -57,8 +59,8 @@ const App = () => {
       // That will be equal to a template string, where we put together the API base URL.
       // Change the endpoint based on whether the user query is present or not. 
       // The encodeURIComponent ensures that special character (such as spaces, punctuation, and other non-ASCII characters) are properly encoded so that they can be safety transmitted over the internet. 
-      const endpoint = query 
-        ? `${API_BASE_URL}/search/movie?query=${encodeURIComponent(query)}` 
+      const endpoint = query
+        ? `${API_BASE_URL}/search/movie?query=${encodeURIComponent(query)}`
         : `${API_BASE_URL}/discover/movie?sort_by=popularity.desc`;
       // Once we have the endpoint we can try to call it.
       // The fetch() is a built in JavaScript function that allows you to make HTTP requests, like get or post to different apis or servers.
@@ -105,12 +107,30 @@ const App = () => {
     }
   }
 
+  // Create a function that will fetch the trending movies. 
+  const loadTrendingMovies = async () => {
+    // Try and catch block
+    try {
+      const movies = await getTrendingMovies();
+      // Set the trending movies once they have been fetched.
+      setTrendingMovies(movies);
+    } catch (error) {
+      console.error(`Error fetching trending movies ${error}`);
+    }
+  }
+
   // Create a useEffect hook for fetching the data. That load at the start, and whenever the debounced searchTerm is changed (cause the user input a film), recall the fetch data. Therefore add it to the dependency array.
   useEffect(() => {
     // Call the fetch movies function to fetch the data as first load of the application. 
     // Passing the search term, that will be equal to the film searched by the user (when searched)
     fetchMovies(debouncedSearchTerm);
   }, [debouncedSearchTerm])
+
+  // Create another useEffect hook that will be called at the start (with an empty dependency array []) and that will be used to fetched the trending movies. They will be fetched only at first load of the application. 
+  useEffect(() => {
+    // Calling the loadTrendingMovies function to fetch the trending movies from the appwrite database.
+    loadTrendingMovies();
+  }, [])
 
   return (
     <main>
@@ -129,10 +149,27 @@ const App = () => {
           <h1 className='text-white'>{searchTerm}</h1> */}
         </header>
 
+        {/* Check if there are movies in the trendingMovies array and in that case display the trending movies section */}
+        {trendingMovies && (
+          <section className='trending'>
+            <h2>Trending Movies</h2>
+            {/* Render an unordered list and map over all the trending list to display them */}
+            <ul>
+              {trendingMovies.map((movie, index) => (
+                // Rendering the number (from 1 to 5) for each of the film. 
+                <li key={moveBy.$id}>
+                  <p>{index + 1}</p>
+                  {/* Render the image of the trending film */}
+                  <img src={movie.poster_url} alt={movie.title} />
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+
         {/* Section about movies */}
         <section className='all-movies'>
-
-          <h2 className='mt-[40px]'>All Movies</h2>
+          <h2>All Movies</h2>
 
           {/* Conditional rendering */}
           {/* First check if we are currently loading. And open up a ternary operator */}
