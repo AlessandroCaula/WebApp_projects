@@ -47,6 +47,17 @@ const App = () => {
   // Defining the loading state variable. 
   const [isLoadingTrending, setIsLoadingTrending] = useState(false);
 
+  // State hook used when clicking on the movie card to see all the details.
+  const [selectedMovie, setSelectedMovie] = useState(null);
+
+  // Function used to handle the onClick of the movie card. This function is then going to be passed to the card as a prop and called from the card when the card is clicked.
+  const handleMovieClick = (movie) => {
+    // Set the selected movie when the card is clicked. 
+    setSelectedMovie(movie);
+    // Console log the clicked movie
+    console.log(movie);
+  };
+
   // Call the useDebounce hook. Pass a callback function to it, and call the setDebouncedSearchTerm, with the searchTerm that we have. 
   // But we can pass a specific number of milliseconds, for how long it should wait before actually changing that value in the state.
   useDebounce(() => setDebouncedSearchTerm(searchTerm), 700, [searchTerm]);
@@ -211,7 +222,8 @@ const App = () => {
                 // Provide a key to each one of the elements. This is needed especially if you're deleting some of these elements from the list, cause react might "confuse" the two elements together and not be sure of what to render. 
 
                 // Render the movie card. Give it the movie.id as key and passing the movie as the prop to the component. 
-                <MovieCard key={movie.id} movie={movie} />
+                // Passing the handleMovieClick function to the card.
+                <MovieCard key={movie.id} movie={movie} handleMovieClick={handleMovieClick} />
               ))}
             </ul>
           )}

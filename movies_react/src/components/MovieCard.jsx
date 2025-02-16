@@ -1,11 +1,13 @@
 // Movie Card component. Destructuring the properties from the movie object itself.
-const MovieCard = (
-  { movie: { title, vote_average, poster_path, release_date, original_language } 
-}) => {
+const MovieCard = ({ movie, handleMovieClick }) => {
+  // Deconstruct the properties from the movie object
+  const { poster_path, title, vote_average, original_language, release_date } = movie;
+
   return (
-    <div className="movie-card">
+    // When the card is clicked, when onClick, call the handleMovieClick function.
+    <div className="movie-card" onClick={() => handleMovieClick(movie)}>
       {/* Render the poster of the movie only if the poster path exists. Else render the no-movie image */}
-      <img src={poster_path ? `http://image.tmdb.org/t/p/w500/${poster_path}` : 'no-movie.png'} alt={title}/>
+      <img src={poster_path ? `http://image.tmdb.org/t/p/w500/${poster_path}` : 'no-movie.png'} alt={title} />
 
       {/* Rendering the title of the movie */}
       <div className="mt-4">
