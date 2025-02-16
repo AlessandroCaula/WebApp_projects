@@ -1,4 +1,4 @@
-const MovieDetails = ({ selectedMovie }) => {
+const MoviePage = ({ selectedMovie }) => {
   return (
     <div className='movie-detail'>
       {/*  className='movie-detail' */}
@@ -32,4 +32,4 @@ const MovieDetails = ({ selectedMovie }) => {
   )
 }
 
-export default MovieDetails
+export default MoviePage
