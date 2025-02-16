@@ -54,8 +54,8 @@ const App = () => {
   const handleMovieClick = (movie) => {
     // Set the selected movie when the card is clicked. 
     setSelectedMovie(movie);
-    // Console log the clicked movie
-    console.log(movie);
+    // // Console log the clicked movie
+    // console.log(movie);
   };
 
   // Call the useDebounce hook. Pass a callback function to it, and call the setDebouncedSearchTerm, with the searchTerm that we have. 
@@ -189,11 +189,11 @@ const App = () => {
               <ul>
                 {/* Render an unordered list and map over all the trending list to display them */}
                 {trendingMovies.map((movie, index) => (
-                <li key={movie.$id}>
-                  <p>{index + 1}</p>
-                  {/* Render the image of the trending film */}
-                  <img src={movie.poster_url} alt={movie.title} />
-                </li>
+                  <li key={movie.$id}>
+                    <p>{index + 1}</p>
+                    {/* Render the image of the trending film */}
+                    <img src={movie.poster_url} alt={movie.title} />
+                  </li>
                 ))}
               </ul>
             )}
@@ -231,6 +231,16 @@ const App = () => {
           {/* {errorMessage && <p className='text-red-500'>{errorMessage}</p>} */}
         </section>
       </div>
+
+      {/* Render the selected movie details */}
+      {selectedMovie && (
+        <div className='movie-detail'>
+          {/*  className='movie-detail' */}
+          <div> 
+            <h2 className='text-white'>{selectedMovie.title}</h2>
+          </div>
+        </div>
+      )}
     </main >
   )
 }

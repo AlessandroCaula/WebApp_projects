@@ -140,6 +140,16 @@
       @apply text-gray-100 font-medium text-base;
     }
   }
+
+  .movie-detail {
+    @apply fixed top-0 right-0 bottom-0 left-0 overflow-y-auto z-50 backdrop-blur-lg bg-black/40;
+
+    & > div {
+      @apply fixed top-5 right-[10%] bottom-5 left-[10%] bg-dark-100 p-5 overflow-y-auto;
+    }
+  }
+  /* fixed top-5 right-5 bottom-5 left-5: Positions the panel fixed to the screen with margins from the top, right, bottom, and left. */
+  /* @apply z-50: Ensures the panel is on top of other elements with a high z-index. */
 }
 
 @utility text-gradient {
