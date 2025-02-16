@@ -4,6 +4,7 @@ import Spinner from './components/Spinner';
 import MovieCard from './components/MovieCard';
 import { useDebounce } from 'react-use';
 import { getTrendingMovies, updateSearchCount } from './appwrite';
+import MovieDetails from './components/MovieDetails';
 
 // API - Application Programming Interface:
 //  - A set of rules that allows one software application to talk to another.
@@ -234,12 +235,7 @@ const App = () => {
 
       {/* Render the selected movie details */}
       {selectedMovie && (
-        <div className='movie-detail'>
-          {/*  className='movie-detail' */}
-          <div> 
-            <h2 className='text-white'>{selectedMovie.title}</h2>
-          </div>
-        </div>
+        <MovieDetails selectedMovie={selectedMovie} />
       )}
     </main >
   )
