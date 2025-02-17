@@ -15,7 +15,7 @@ const MoviePage = ({ selectedMovie }) => {
                 ? `http://image.tmdb.org/t/p/w500/${selectedMovie.poster_path}`
                 : 'no-movie.png'}
               alt={selectedMovie.title}
-              className="w-80 h-auto mb-4"
+              className="w-77 h-auto mb-4"
             />
             {/* Adding the rating and year of the film */}
             <div className="flex mt-3 items-center flex-wrap gap-2">
@@ -25,25 +25,18 @@ const MoviePage = ({ selectedMovie }) => {
                 <img src="star.svg" className="size-4 object-contain" />
                 {/* Add the rating */}
                 <p className="text-white font-bold text-base">
-                  {selectedMovie.vote_average ? selectedMovie.vote_average.toFixed(1) : 'N/A'}
+                  {selectedMovie.vote_average ? selectedMovie.vote_average.toFixed(1) : 'N/A'} &nbsp;
+                  <span className="text-gray-100 font-medium text-base">({selectedMovie.vote_count ? selectedMovie.vote_count : 'N/A'})</span>
                 </p>
               </div>
               {/* Put one dot for separation */}
-              <span className="text-white">•</span>
-              <p className="text-white">Language</p>
-              <span className="text-white">•</span>
-              <p className="text-white">Year</p>
+              <span className="text-sm text-gray-100">•</span>
+              <p className="capitalize text-gray-100 font-medium text-base">
+                {selectedMovie.original_language ? selectedMovie.original_language : 'N/A'}
+              </p>
+              <span className="text-sm text-gray-100">•</span>
+              <p className="text-gray-100 font-medium text-base">{selectedMovie.release_date}</p>
             </div>
-
-            {/* Put one dot for separation */}
-            {/* <span>•</span>
-            <p className="lang">{selectedMovie.original_language}</p>
-            <span>•</span>
-            <p className="text-white"> */}
-
-              {/* Only tendering the year of the release date if it exists */}
-              {/* {selectedMovie.release_date ? selectedMovie.release_date.split('-')[0] : 'N/A'} */}
-
           </div>
 
           {/* Right section */}
