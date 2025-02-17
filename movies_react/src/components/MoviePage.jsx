@@ -1,10 +1,16 @@
-const MoviePage = ({ selectedMovie }) => {
+const MoviePage = ({ selectedMovie, handleCloseMovie }) => {
   return (
     <div className='movie-page'>
       {/*  className='movie-detail' */}
       <div className='movie-page-content overflow-auto'>
-        {/* Adding the title on the card */}
-        <h2 className='text-white mb-10'>{selectedMovie.title}</h2>
+        <div className="flex flex-row items-center mb-10 justify-between">
+          {/* Adding the title on the card */}
+          <h2 className='text-white'>{selectedMovie.title}</h2>
+          <i 
+            className="fa-solid fa-xmark text-gray-100 text-2xl cursor-pointer"
+            onClick={() => handleCloseMovie()}
+          ></i>
+        </div>
         {/* Body of the Movie Detail */}
         <div className="flex flex-row max-md:flex-col">
           {/* Left section: Poster, Rating, Year */}
@@ -26,7 +32,7 @@ const MoviePage = ({ selectedMovie }) => {
                 {/* Add the rating */}
                 <p className="text-white font-bold text-base">
                   {selectedMovie.vote_average ? selectedMovie.vote_average.toFixed(1) : 'N/A'} &nbsp;
-                  <span className="text-gray-100 font-medium text-base">({selectedMovie.vote_count ? selectedMovie.vote_count : 'N/A'})</span>
+                  <span className="text-gray-100 font-medium text-base">({selectedMovie.vote_count ? selectedMovie.vote_count : 'N/A'} votes)</span>
                 </p>
               </div>
               {/* Put one dot for separation */}
@@ -40,8 +46,9 @@ const MoviePage = ({ selectedMovie }) => {
           </div>
 
           {/* Right section */}
-          <div className="flex-1 max-md:mt-5 ml-10 max-md:ml-0">
-            <p className="text-white">Description</p>
+          <div className="flex-1 flex flex-col max-md:mt-10 ml-10 max-md:ml-0">
+            <p className="text-gray-100 font-medium text-base mb-4">Overview</p>
+            <p className="text-white text-base font-medium">{selectedMovie.overview ? selectedMovie.overview : 'N/A'}</p>
           </div>
         </div>
       </div>

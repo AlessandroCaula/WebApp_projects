@@ -52,12 +52,18 @@ const App = () => {
   const [selectedMovie, setSelectedMovie] = useState(null);
 
   // Function used to handle the onClick of the movie card. This function is then going to be passed to the card as a prop and called from the card when the card is clicked.
-  const handleMovieClick = (movie) => {
+  const handleOpenMovie = (movie) => {
     // Set the selected movie when the card is clicked. 
     setSelectedMovie(movie);
     // // Console log the clicked movie
     // console.log(movie);
   };
+
+  // Function used to handle the close Movie Page
+  const handleCloseMovie = () => {
+    // Simply set the movie clicked to null
+    setSelectedMovie(null);
+  }
 
   // Call the useDebounce hook. Pass a callback function to it, and call the setDebouncedSearchTerm, with the searchTerm that we have. 
   // But we can pass a specific number of milliseconds, for how long it should wait before actually changing that value in the state.
@@ -224,7 +230,7 @@ const App = () => {
 
                 // Render the movie card. Give it the movie.id as key and passing the movie as the prop to the component. 
                 // Passing the handleMovieClick function to the card.
-                <MovieCard key={movie.id} movie={movie} handleMovieClick={handleMovieClick} />
+                <MovieCard key={movie.id} movie={movie} handleOpenMovie={handleOpenMovie} />
               ))}
             </ul>
           )}
@@ -235,7 +241,7 @@ const App = () => {
 
       {/* Render the selected movie details */}
       {selectedMovie && (
-        <MoviePage selectedMovie={selectedMovie} />
+        <MoviePage selectedMovie={selectedMovie} handleCloseMovie={handleCloseMovie}/>
       )}
     </main >
   )
