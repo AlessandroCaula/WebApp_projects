@@ -9,4 +9,4 @@ This is a React based web application that allows user to search for movies and 
 - **Appwrite Integration**: The app uses Appwrite for backend services, including database management for the trending movies.
 
 
-Deployed web app: https://movie-ac.netlify.app/
+🌐 Deployed web app - https://movie-ac.netlify.app/
