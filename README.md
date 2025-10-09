@@ -1,6 +1,6 @@
 # JavaScript_projects
 
-Repository containing different projects built with React.js, Next.js, TailwindCSS and other frameworks and libraries for Front-End and Full-Stack Web Development.
+Repository containing different projects built with React.js, TailwindCSS and other frameworks and libraries for Front-End and Full-Stack Web Development.
 
 Some more relevant projects:
 
