@@ -6,7 +6,7 @@ Some more relevant projects:
 
 - [Awwwards](./awwwards_react-js/) - 🌐 [Live Demo ↗](https://awward-ac.netlify.app/) 
     
-    Learning how to build and deploy a SaaS landing page with modern UI and mobile-first principles while while improving skills in **React.js**, **Tailwind CSS** and **GSAP**.
+    Learning how to build and deploy a modern landing page with modern UI and mobile-first principles while while improving skills in **React.js**, **Tailwind CSS** and **GSAP**.
 
 - [Fit App](./fit-app_react-js/) - 🌐 [Live Demo ↗](https://swole-ac.netlify.app/#workout)
 
